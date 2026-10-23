@@ -42,14 +42,13 @@ const cleanWhatsapp = whatsapp ? whatsapp.replace(/[^0-9]/g, '') : '';
   <!-- Main Listing Container -->
   <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
     
-    <!-- Hero Photo or Branded Fallback (Swappable via click) -->
-    <div id="hero-container" class="relative h-64 md:h-96 bg-brand-lightgreen flex items-center justify-center overflow-hidden">
+    <!-- Hero Photo or Branded Fallback -->
+    <div class="relative h-64 md:h-96 bg-brand-lightgreen flex items-center justify-center overflow-hidden">
       {photos && photos.length > 0 ? (
         <img 
-          id="main-hero-image"
           src={photos[0].src} 
           alt={name} 
-          class="w-full h-full object-cover transition-all duration-300"
+          class="w-full h-full object-cover"
         />
       ) : (
         <span class="text-brand-green/40 font-heading font-extrabold text-3xl">
@@ -83,16 +82,16 @@ const cleanWhatsapp = whatsapp ? whatsapp.replace(/[^0-9]/g, '') : '';
           {description}
         </p>
 
-        <!-- Clickable Photo Gallery (Shows all photos, allowing users to click to view big above) -->
+        <!-- Clickable Photo Gallery Thumbnails -->
         {photos && photos.length > 0 && (
           <div class="mt-8">
-            <h2 class="font-heading font-bold text-xl text-brand-dark mb-4">Photos (Click to view larger)</h2>
+            <h2 class="font-heading font-bold text-xl text-brand-dark mb-4">Photos (Tap to view full screen)</h2>
             <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
               {photos.map((photo, index) => (
                 <button 
                   type="button"
                   data-img-src={photo.src}
-                  class="gallery-thumb h-40 rounded-lg overflow-hidden bg-brand-lightgreen border-2 border-transparent hover:border-brand-orange transition-all cursor-pointer text-left p-0 focus:outline-none"
+                  class="gallery-thumb h-40 rounded-lg overflow-hidden bg-brand-lightgreen border-2 border-transparent hover:border-brand-orange transition-all cursor-pointer text-left p-0 focus:outline-none shadow-sm"
                 >
                   <img 
                     src={photo.src} 
@@ -167,24 +166,52 @@ const cleanWhatsapp = whatsapp ? whatsapp.replace(/[^0-9]/g, '') : '';
 
     </div>
   </div>
+
+  <!-- Full-Screen Lightbox Modal (Hidden by default) -->
+  <div id="image-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <button 
+      type="button" 
+      id="close-modal" 
+      class="absolute top-5 right-5 text-white bg-black/50 hover:bg-black w-10 h-10 rounded-full font-bold text-xl flex items-center justify-center cursor-pointer transition-colors"
+      aria-label="Close modal"
+    >
+      &times;
+    </button>
+    <img id="modal-img" src="" alt="Enlarged view" class="max-w-full max-h-[90vh] object-contain rounded-xl shadow-2xl scale-95 transition-transform duration-300" />
+  </div>
 </Layout>
 
 <script>
-  // Simple gallery switcher script
-  const mainHeroImage = document.getElementById('main-hero-image') as HTMLImageElement;
+  const modal = document.getElementById('image-modal');
+  const modalImg = document.getElementById('modal-img') as HTMLImageElement;
+  const closeModal = document.getElementById('close-modal');
   const thumbs = document.querySelectorAll('.gallery-thumb');
 
   thumbs.forEach((thumb) => {
     thumb.addEventListener('click', () => {
-      const newSrc = thumb.getAttribute('data-img-src');
-      if (mainHeroImage && newSrc) {
-        // Smooth transition effect
-        mainHeroImage.style.opacity = '0.3';
-        setTimeout(() => {
-          mainHeroImage.src = newSrc;
-          mainHeroImage.style.opacity = '1';
-        }, 150);
+      const src = thumb.getAttribute('data-img-src');
+      if (modal && modalImg && src) {
+        modalImg.src = src;
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        setTimeout(() => modalImg.classList.remove('scale-95'), 10);
       }
     });
+  });
+
+  function closeLightbox() {
+    if (modal && modalImg) {
+      modalImg.classList.add('scale-95');
+      modal.classList.add('hidden');
+      document.body.style.overflow = '';
+    }
+  }
+
+  closeModal?.addEventListener('click', closeLightbox);
+  modal?.addEventListener('click', (e) => {
+    if (e.target === modal) closeLightbox();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeLightbox();
   });
 </script>
