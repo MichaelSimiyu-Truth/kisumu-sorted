@@ -6,7 +6,12 @@
   "phone": "+254700111222",
   "whatsapp": "254700111222",
   "address": "Dunga Beach Road, Kisumu",
-  "photos": [],
+  "photos": [
+    "../../assets/listings/dunga1.webp",
+    "../../assets/listings/dunga2.jpg",
+    "../../assets/listings/dunga3.jpg"
+
+  ],
   "featured": true,
   "featured_until": "2026-12-31",
   "status": "live",
