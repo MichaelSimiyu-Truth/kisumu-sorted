@@ -2,9 +2,9 @@ backend:
   name: github
   repo: MichaelSimiyu-Truth/kisumu-sorted
   branch: main
-  # This points to the authentication gateway we will set up in Step 2
-  auth_endpoint: https://kisumu-sorted-auth.keith-sm-wanjala.workers.dev
-
+  base_url: https://kisumu-sorted-auth.keith-sm-wanjala.workers.dev
+  auth_endpoint: auth
+  
 media_folder: "src/assets/listings"
 public_folder: "../../assets/listings"
 
