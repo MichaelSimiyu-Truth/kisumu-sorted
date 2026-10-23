@@ -1,0 +1,54 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="About">
+  <div class="max-w-3xl mx-auto py-8">
+    
+    <!-- Heading -->
+    <div class="text-center mb-10">
+      <h1 class="font-heading font-extrabold text-3xl md:text-4xl text-brand-green mb-3">
+        About <span class="relative inline-block">
+          Kisumu Sorted
+          <span class="absolute bottom-1 left-0 w-full h-2 bg-brand-orange -z-10"></span>
+        </span>
+      </h1>
+      <p class="text-gray-600 font-body text-base">
+        Connecting locals and visitors to the vibrant heartbeat of Kisumu.
+      </p>
+    </div>
+
+    <!-- Content Card -->
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 md:p-10 space-y-6 text-gray-700 leading-relaxed font-body">
+      <div>
+        <h2 class="font-heading font-bold text-2xl text-brand-dark mb-3">Our Mission</h2>
+        <p>
+          Kisumu Sorted was built to solve a simple problem: finding reliable local businesses, cozy cafes, trusted stays, and hidden gems around Lake Victoria shouldn't feel like a chore. We provide a clean, fast, mobile-friendly directory that puts you in touch with local enterprises instantly via WhatsApp or phone calls.
+        </p>
+      </div>
+
+      <div class="border-t border-gray-100 pt-6">
+        <h2 class="font-heading font-bold text-2xl text-brand-dark mb-3">Built for Kisumu</h2>
+        <p>
+          Whether you are looking for fresh tilapia by the lake, a quiet place to work in Milimani, or weekend nightlife in the CBD, our directory is tailored specifically for the community. Every listing is curated to help local businesses thrive in a digital-first economy.
+        </p>
+      </div>
+
+      <div class="border-t border-gray-100 pt-6">
+        <h2 class="font-heading font-bold text-2xl text-brand-dark mb-3">Get Involved</h2>
+        <p>
+          Are you a local business owner? Getting listed is quick and easy. Head over to our application page to submit your details and join the platform.
+        </p>
+        <div class="mt-4">
+          <a 
+            href="/apply" 
+            class="inline-block bg-brand-orange text-brand-dark font-heading font-bold px-6 py-3 rounded-xl hover:bg-orange-500 transition-colors shadow-sm"
+          >
+            List your business
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</Layout>
