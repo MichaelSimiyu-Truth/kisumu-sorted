@@ -4,7 +4,7 @@ backend:
   branch: main
   base_url: https://kisumu-sorted-auth.keith-sm-wanjala.workers.dev
   auth_endpoint: auth
-  
+
 media_folder: "src/assets/listings"
 public_folder: "../../assets/listings"
 
@@ -30,7 +30,7 @@ collections:
       - { label: "Map Link", name: "map_link", widget: "string", required: false }
       - { label: "Photos", name: "photos", widget: "image", required: false, multiple: true }
       - { label: "Featured Business", name: "featured", widget: "boolean", default: false }
-      - { label: "Featured Until", name: "featured_until", widget: "date", required: false, format: "YYYY-MM-DD" }
+      - { label: "Featured Until", name: "featured_until", widget: "datetime", required: false, format: "YYYY-MM-DD" }
       - { 
           label: "Status", 
           name: "status", 
@@ -38,4 +38,4 @@ collections:
           options: ["pending", "live", "expired"], 
           default: "pending" 
         }
-      - { label: "Date Added", name: "date_added", widget: "date", format: "YYYY-MM-DD" }
+      - { label: "Date Added", name: "date_added", widget: "datetime", format: "YYYY-MM-DD" }
