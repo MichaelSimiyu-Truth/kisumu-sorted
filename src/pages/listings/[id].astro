@@ -1,0 +1,167 @@
+---
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+import Layout from '../../layouts/Layout.astro';
+
+// 1. Tell Astro which pages to generate at build time
+export async function getStaticPaths() {
+  const listings = await getCollection('listings', ({ data }) => {
+    return data.status === 'live';
+  });
+
+  return listings.map((listing) => ({
+    params: { id: listing.id },
+    props: { listing },
+  }));
+}
+
+// 2. Get the listing data for the current page
+const { listing } = Astro.props;
+const { 
+  name, 
+  category, 
+  area, 
+  description, 
+  phone, 
+  whatsapp, 
+  address, 
+  map_link, 
+  photos, 
+  featured 
+} = listing.data;
+
+const cleanWhatsapp = whatsapp ? whatsapp.replace(/[^0-9]/g, '') : '';
+---
+
+<Layout title={name}>
+  <!-- Back Link -->
+  <div class="mb-6">
+    <a href="/" class="inline-flex items-center gap-1 text-sm font-semibold text-brand-green hover:text-brand-orange transition-colors">
+      &larr; Back to all businesses
+    </a>
+  </div>
+
+  <!-- Main Listing Container -->
+  <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+    
+    <!-- Hero Photo or Branded Fallback -->
+    <div class="relative h-64 md:h-96 bg-brand-lightgreen flex items-center justify-center overflow-hidden">
+      {photos && photos.length > 0 ? (
+        <Image 
+          src={photos[0]} 
+          alt={name} 
+          class="w-full h-full object-cover"
+        />
+      ) : (
+        <span class="text-brand-green/40 font-heading font-extrabold text-3xl">
+          Kisumu Sorted.
+        </span>
+      )}
+
+      {featured && (
+        <span class="absolute top-4 right-4 bg-brand-orange text-brand-dark text-sm font-heading font-extrabold px-4 py-1.5 rounded-full shadow">
+          ★ Featured Business
+        </span>
+      )}
+    </div>
+
+    <!-- Content Grid -->
+    <div class="p-6 md:p-10 grid grid-cols-1 lg:grid-cols-3 gap-8">
+      
+      <!-- Left Column: Details & Photos (2 cols wide on desktop) -->
+      <div class="lg:col-span-2">
+        <div class="flex flex-wrap items-center gap-2 text-sm font-medium text-brand-green mb-3">
+          <span class="bg-brand-lightgreen px-3 py-1 rounded-md font-bold">{category}</span>
+          <span>•</span>
+          <span class="text-gray-600 font-semibold">{area}</span>
+        </div>
+
+        <h1 class="font-heading font-extrabold text-3xl md:text-4xl text-brand-dark mb-4">
+          {name}
+        </h1>
+
+        <p class="text-gray-700 leading-relaxed whitespace-pre-line text-base md:text-lg mb-8">
+          {description}
+        </p>
+
+        <!-- Extra Photos Gallery (shows if there is more than 1 photo) -->
+        {photos && photos.length > 1 && (
+          <div class="mt-8">
+            <h2 class="font-heading font-bold text-xl text-brand-dark mb-4">Photos</h2>
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+              {photos.slice(1).map((photo, index) => (
+                <div class="h-40 rounded-lg overflow-hidden bg-brand-lightgreen">
+                  <Image 
+                    src={photo} 
+                    alt={`${name} photo ${index + 2}`} 
+                    class="w-full h-full object-cover" 
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+
+      <!-- Right Column: Contact & Location Box -->
+      <div class="bg-brand-offwhite p-6 rounded-xl border border-gray-200 h-fit">
+        <h2 class="font-heading font-bold text-lg text-brand-dark mb-4">
+          Contact & Location
+          <span class="block w-8 h-1 bg-brand-orange mt-1 rounded"></span>
+        </h2>
+
+        <!-- Primary Action Buttons -->
+        <div class="flex flex-col gap-3 mb-6">
+          {cleanWhatsapp && (
+            <a 
+              href={`https://wa.me/${cleanWhatsapp}?text=${encodeURIComponent(`Hi ${name}, I found your business on Kisumu Sorted.`)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="w-full bg-brand-green text-white text-center font-bold py-3 px-4 rounded-xl hover:opacity-95 transition-opacity shadow-sm"
+            >
+              Chat on WhatsApp
+            </a>
+          )}
+
+          {phone && (
+            <a 
+              href={`tel:${phone}`}
+              class="w-full bg-brand-orange text-brand-dark text-center font-bold py-3 px-4 rounded-xl hover:bg-orange-500 transition-colors shadow-sm"
+            >
+              Call {phone}
+            </a>
+          )}
+        </div>
+
+        <!-- Address & Map Details -->
+        <div class="space-y-3 text-sm border-t border-gray-200 pt-4">
+          <div>
+            <span class="font-bold text-gray-900 block">Area:</span>
+            <span class="text-gray-600">{area}, Kisumu</span>
+          </div>
+
+          {address && (
+            <div>
+              <span class="font-bold text-gray-900 block">Address:</span>
+              <span class="text-gray-600">{address}</span>
+            </div>
+          )}
+
+          {map_link && (
+            <div class="pt-2">
+              <a 
+                href={map_link}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-block text-brand-green font-bold underline hover:text-brand-orange transition-colors"
+              >
+                Open in Google Maps &rarr;
+              </a>
+            </div>
+          )}
+        </div>
+      </div>
+
+    </div>
+  </div>
+</Layout>

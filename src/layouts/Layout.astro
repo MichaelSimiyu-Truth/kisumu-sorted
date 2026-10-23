@@ -1,23 +1,40 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+	title: string;
+}
+
+const { title } = Astro.props;
+---
+
 <!doctype html>
 <html lang="en">
 	<head>
-		<meta charset="utf-8" />
+		<meta charset="UTF-8" />
+		<meta name="description" content="Kisumu local business directory" />
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
+		<title>{title} | Kisumu Sorted</title>
+		
+		<!-- Google Fonts: Plus Jakarta Sans (Headings) & Inter (Body) -->
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:ital,wght@0,700;0,800;1,700&display=swap" rel="stylesheet">
 	</head>
-	<body class="bg-brand-offwhite text-brand-dark font-body">
-		<slot />
+	
+	<!-- flex col and min-h-screen force the footer to the bottom even on short pages -->
+	<body class="bg-brand-offwhite text-brand-dark font-body min-h-screen flex flex-col">
+		<Header />
+		
+		<!-- The <slot /> is where the content of individual pages will be injected -->
+		<main class="grow container mx-auto px-4 py-8 max-w-5xl">
+			<slot />
+		</main>
+		
+		<Footer />
 	</body>
 </html>
-
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
-</style>

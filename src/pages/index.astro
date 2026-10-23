@@ -1,11 +1,185 @@
 ---
-import Welcome from '../components/Welcome.astro';
+import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
+import ListingCard from '../components/ListingCard.astro';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+// 1. Fetch only 'live' listings
+const allListings = await getCollection('listings', ({ data }) => {
+  return data.status === 'live';
+});
+
+// 2. Sort so featured businesses appear first
+const sortedListings = allListings.sort((a, b) => {
+  if (a.data.featured && !b.data.featured) return -1;
+  if (!a.data.featured && b.data.featured) return 1;
+  return 0;
+});
+
+// 3. Define the exact categories from your schema
+const categories = [
+  'All',
+  'Eat & Drink',
+  'Places to Stay',
+  'Places to Explore',
+  'Places to Shop',
+  'Music & Nightlife'
+];
 ---
 
-<Layout>
-	<Welcome />
+<Layout title="Home">
+  <!-- Hero Section -->
+  <div class="text-center py-8 md:py-14">
+    <h1 class="font-heading font-extrabold text-4xl md:text-5xl text-brand-green mb-4">
+      Find the best in <span class="relative inline-block">
+        Kisumu
+        <span class="absolute bottom-1 left-0 w-full h-2 bg-brand-orange -z-10"></span>
+      </span>
+    </h1>
+    <p class="text-lg text-gray-600 font-body max-w-2xl mx-auto mb-8">
+      The easiest way to discover local businesses, services, and experiences around Lake Victoria.
+    </p>
+
+    <!-- Search Bar -->
+    <div class="max-w-xl mx-auto">
+      <div class="relative flex items-center">
+        <input 
+          type="search" 
+          id="search-input"
+          placeholder="Search by business name, area (e.g. Milimani), or keyword..." 
+          class="w-full px-5 py-3.5 rounded-full border-2 border-gray-200 bg-white text-brand-dark focus:outline-none focus:border-brand-green shadow-sm text-sm md:text-base transition-colors"
+        />
+      </div>
+    </div>
+  </div>
+
+  <!-- Category Filter Chips -->
+  <div class="flex items-center gap-2 overflow-x-auto pb-4 mb-6 no-scrollbar" id="category-filters">
+    {categories.map((cat, index) => (
+      <button
+        type="button"
+        data-filter={cat}
+        class={`filter-btn shrink-0 inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold transition-all cursor-pointer ${
+          index === 0 
+            ? 'bg-brand-green text-white shadow-sm' 
+            : 'bg-brand-lightgreen text-brand-dark hover:bg-green-200'
+        }`}
+      >
+        <!-- Orange dot motif from the logo (visible on active chip) -->
+        <span class={`dot w-2 h-2 rounded-full bg-brand-orange ${index === 0 ? 'inline-block' : 'hidden'}`}></span>
+        {cat}
+      </button>
+    ))}
+  </div>
+
+  <!-- Directory Section -->
+  <section class="mt-2">
+    <div class="flex justify-between items-end mb-6">
+      <h2 class="font-heading font-bold text-2xl text-brand-dark">
+        Explore Businesses
+        <span class="block w-12 h-1 bg-brand-orange mt-1 rounded"></span>
+      </h2>
+      <span id="results-count" class="text-sm text-gray-500 font-medium">
+        {sortedListings.length} {sortedListings.length === 1 ? 'listing' : 'listings'}
+      </span>
+    </div>
+
+    <!-- 3-Column Responsive Grid -->
+    <div id="listings-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {sortedListings.map((listing) => (
+        <ListingCard listing={listing} />
+      ))}
+    </div>
+
+    <!-- Empty State (Hidden by default) -->
+    <div id="empty-state" class="hidden text-center py-12 bg-white rounded-xl border border-gray-200">
+      <p class="font-heading font-bold text-xl text-brand-dark mb-2">No businesses found</p>
+      <p class="text-gray-600 text-sm mb-4">Try adjusting your search or selecting a different category.</p>
+      <button 
+        id="reset-filters" 
+        class="bg-brand-lightgreen text-brand-dark font-bold text-sm px-4 py-2 rounded-lg hover:bg-green-200 transition-colors cursor-pointer"
+      >
+        Reset filters
+      </button>
+    </div>
+  </section>
 </Layout>
+
+<script>
+  const searchInput = document.getElementById('search-input') as HTMLInputElement;
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  const cards = document.querySelectorAll('.listing-card');
+  const resultsCount = document.getElementById('results-count');
+  const emptyState = document.getElementById('empty-state');
+  const resetBtn = document.getElementById('reset-filters');
+
+  let activeCategory = 'All';
+  let searchQuery = '';
+
+  function filterListings() {
+    let visibleCount = 0;
+
+    cards.forEach((card) => {
+      const cardElement = card as HTMLElement;
+      const category = cardElement.getAttribute('data-category') || '';
+      const searchContent = cardElement.getAttribute('data-search') || '';
+
+      const matchesCategory = activeCategory === 'All' || category === activeCategory;
+      const matchesSearch = searchContent.includes(searchQuery);
+
+      if (matchesCategory && matchesSearch) {
+        cardElement.style.display = 'flex';
+        visibleCount++;
+      } else {
+        cardElement.style.display = 'none';
+      }
+    });
+
+    // Update counter text
+    if (resultsCount) {
+      resultsCount.textContent = `${visibleCount} ${visibleCount === 1 ? 'listing' : 'listings'}`;
+    }
+
+    // Toggle empty state message
+    if (emptyState) {
+      emptyState.classList.toggle('hidden', visibleCount > 0);
+    }
+  }
+
+  // Handle Category Chip Clicks
+  filterBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      activeCategory = btn.getAttribute('data-filter') || 'All';
+
+      // Update active button styles & orange dot motif
+      filterBtns.forEach((b) => {
+        const isSelected = b === btn;
+        b.classList.toggle('bg-brand-green', isSelected);
+        b.classList.toggle('text-white', isSelected);
+        b.classList.toggle('shadow-sm', isSelected);
+        b.classList.toggle('bg-brand-lightgreen', !isSelected);
+        b.classList.toggle('text-brand-dark', !isSelected);
+
+        const dot = b.querySelector('.dot');
+        if (dot) {
+          dot.classList.toggle('inline-block', isSelected);
+          dot.classList.toggle('hidden', !isSelected);
+        }
+      });
+
+      filterListings();
+    });
+  });
+
+  // Handle Live Search Typing
+  searchInput?.addEventListener('input', (e) => {
+    searchQuery = (e.target as HTMLInputElement).value.toLowerCase().trim();
+    filterListings();
+  });
+
+  // Handle Reset Button
+  resetBtn?.addEventListener('click', () => {
+    if (searchInput) searchInput.value = '';
+    searchQuery = '';
+    (filterBtns[0] as HTMLElement)?.click();
+  });
+</script>
