@@ -1,0 +1,182 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="List Your Business">
+  <div class="max-w-2xl mx-auto py-8">
+    
+    <!-- Heading -->
+    <div class="text-center mb-8">
+      <h1 class="font-heading font-extrabold text-3xl md:text-4xl text-brand-green mb-3">
+        List your business on <span class="relative inline-block">
+          Kisumu Sorted
+          <span class="absolute bottom-1 left-0 w-full h-2 bg-brand-orange -z-10"></span>
+        </span>
+      </h1>
+      <p class="text-gray-600 font-body text-base">
+        Get discovered by customers around Lake Victoria. Fill out the details below to submit your business for review.
+      </p>
+    </div>
+
+    <!-- Form Card -->
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 md:p-8">
+      <form id="listing-form" class="space-y-6">
+        
+        <!-- Business Name -->
+        <div>
+          <label for="bus-name" class="block font-heading font-bold text-sm text-brand-dark mb-2">
+            Business Name *
+          </label>
+          <input 
+            type="text" 
+            id="bus-name" 
+            required
+            placeholder="e.g. Dunga Hill Camp"
+            class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:border-brand-green text-sm"
+          />
+        </div>
+
+        <!-- Category & Area (Grid) -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label for="bus-category" class="block font-heading font-bold text-sm text-brand-dark mb-2">
+              Category *
+            </label>
+            <select 
+              id="bus-category" 
+              required
+              class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:border-brand-green bg-white text-sm"
+            >
+              <option value="">Select a category</option>
+              <option value="Eat & Drink">Eat & Drink</option>
+              <option value="Places to Stay">Places to Stay</option>
+              <option value="Places to Explore">Places to Explore</option>
+              <option value="Places to Shop">Places to Shop</option>
+              <option value="Music & Nightlife">Music & Nightlife</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="bus-area" class="block font-heading font-bold text-sm text-brand-dark mb-2">
+              Area / Neighborhood *
+            </label>
+            <input 
+              type="text" 
+              id="bus-area" 
+              required
+              placeholder="e.g. Milimani, CBD, Dunga"
+              class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:border-brand-green text-sm"
+            />
+          </div>
+        </div>
+
+        <!-- Phone & WhatsApp -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label for="bus-phone" class="block font-heading font-bold text-sm text-brand-dark mb-2">
+              Phone Number *
+            </label>
+            <input 
+              type="tel" 
+              id="bus-phone" 
+              required
+              placeholder="e.g. +254 700 000 000"
+              class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:border-brand-green text-sm"
+            />
+          </div>
+
+          <div>
+            <label for="bus-whatsapp" class="block font-heading font-bold text-sm text-brand-dark mb-2">
+              WhatsApp Number
+            </label>
+            <input 
+              type="tel" 
+              id="bus-whatsapp" 
+              placeholder="e.g. 254700000000"
+              class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:border-brand-green text-sm"
+            />
+          </div>
+        </div>
+
+        <!-- Description -->
+        <div>
+          <label for="bus-desc" class="block font-heading font-bold text-sm text-brand-dark mb-2">
+            Business Description *
+          </label>
+          <textarea 
+            id="bus-desc" 
+            required
+            rows="4"
+            placeholder="Tell customers what your business offers..."
+            class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:border-brand-green text-sm resize-none"
+          ></textarea>
+        </div>
+
+        <!-- Submit Button -->
+        <button 
+          type="submit"
+          class="w-full bg-brand-green text-white font-heading font-bold py-3.5 px-6 rounded-xl hover:opacity-95 transition-opacity shadow-sm cursor-pointer text-base"
+        >
+          Submit Business Application
+        </button>
+
+      </form>
+
+      <!-- Success Message Box (Hidden initially) -->
+      <div id="success-box" class="hidden text-center py-8">
+        <div class="w-16 h-16 bg-brand-lightgreen text-brand-green rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-bold">
+          ✓
+        </div>
+        <h2 class="font-heading font-bold text-2xl text-brand-dark mb-2">Application Received!</h2>
+        <p class="text-gray-600 text-sm mb-6">
+          Thank you for applying. We will review your details and list your business shortly.
+        </p>
+        <button 
+          id="reset-form-btn" 
+          class="bg-brand-lightgreen text-brand-dark font-bold text-sm px-5 py-2.5 rounded-lg hover:bg-green-200 transition-colors cursor-pointer"
+        >
+          Submit another business
+        </button>
+      </div>
+
+    </div>
+  </div>
+</Layout>
+
+<script>
+  const form = document.getElementById('listing-form') as HTMLFormElement;
+  const successBox = document.getElementById('success-box');
+  const resetBtn = document.getElementById('reset-form-btn');
+
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    // Gather form values
+    const name = (document.getElementById('bus-name') as HTMLInputElement).value;
+    const category = (document.getElementById('bus-category') as HTMLSelectElement).value;
+    const area = (document.getElementById('bus-area') as HTMLInputElement).value;
+    const phone = (document.getElementById('bus-phone') as HTMLInputElement).value;
+    const whatsapp = (document.getElementById('bus-whatsapp') as HTMLInputElement).value;
+    const description = (document.getElementById('bus-desc') as HTMLTextAreaElement).value;
+
+    // Option: Format message for WhatsApp submission to founders
+    const message = `*New Listing Application*\n\n*Name:* ${name}\n*Category:* ${category}\n*Area:* ${area}\n*Phone:* ${phone}\n*WhatsApp:* ${whatsapp}\n*Description:* ${description}`;
+    
+    // You can replace this phone number with the founders' admin WhatsApp number
+    const adminWhatsApp = '254741830877'; 
+    const whatsappUrl = `https://wa.me/${adminWhatsApp}?text=${encodeURIComponent(message)}`;
+
+    // Open WhatsApp pre-filled with the application details
+    window.open(whatsappUrl, '_blank');
+
+    // Show success view on the page
+    form.classList.add('hidden');
+    successBox?.classList.remove('hidden');
+  });
+
+  resetBtn?.addEventListener('click', () => {
+    form.reset();
+    form.classList.remove('hidden');
+    successBox?.classList.add('hidden');
+  });
+</script>
