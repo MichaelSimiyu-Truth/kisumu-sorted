@@ -168,7 +168,7 @@ const cleanWhatsapp = whatsapp ? whatsapp.replace(/[^0-9]/g, '') : '';
   </div>
 
   <!-- Full-Screen Lightbox Modal (Hidden by default) -->
-  <div id="image-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+  <div id="image-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4">
     <button 
       type="button" 
       id="close-modal" 
@@ -193,7 +193,8 @@ const cleanWhatsapp = whatsapp ? whatsapp.replace(/[^0-9]/g, '') : '';
       if (modal && modalImg && src) {
         modalImg.src = src;
         modal.classList.remove('hidden');
-        document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        modal.classList.add('flex');
+        document.body.style.overflow = 'hidden'; 
         setTimeout(() => modalImg.classList.remove('scale-95'), 10);
       }
     });
@@ -203,6 +204,7 @@ const cleanWhatsapp = whatsapp ? whatsapp.replace(/[^0-9]/g, '') : '';
     if (modal && modalImg) {
       modalImg.classList.add('scale-95');
       modal.classList.add('hidden');
+      modal.classList.remove('flex');
       document.body.style.overflow = '';
     }
   }
