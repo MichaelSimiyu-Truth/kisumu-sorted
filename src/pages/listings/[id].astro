@@ -3,7 +3,6 @@ import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
 import Layout from '../../layouts/Layout.astro';
 
-// 1. Tell Astro which pages to generate at build time
 export async function getStaticPaths() {
   const listings = await getCollection('listings', ({ data }) => {
     return data.status === 'live';
@@ -15,7 +14,6 @@ export async function getStaticPaths() {
   }));
 }
 
-// 2. Get the listing data for the current page
 const { listing } = Astro.props;
 const { 
   name, 
@@ -44,13 +42,14 @@ const cleanWhatsapp = whatsapp ? whatsapp.replace(/[^0-9]/g, '') : '';
   <!-- Main Listing Container -->
   <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
     
-    <!-- Hero Photo or Branded Fallback -->
-    <div class="relative h-64 md:h-96 bg-brand-lightgreen flex items-center justify-center overflow-hidden">
+    <!-- Hero Photo or Branded Fallback (Swappable via click) -->
+    <div id="hero-container" class="relative h-64 md:h-96 bg-brand-lightgreen flex items-center justify-center overflow-hidden">
       {photos && photos.length > 0 ? (
-        <Image 
-          src={photos[0]} 
+        <img 
+          id="main-hero-image"
+          src={photos[0].src} 
           alt={name} 
-          class="w-full h-full object-cover"
+          class="w-full h-full object-cover transition-all duration-300"
         />
       ) : (
         <span class="text-brand-green/40 font-heading font-extrabold text-3xl">
@@ -59,7 +58,7 @@ const cleanWhatsapp = whatsapp ? whatsapp.replace(/[^0-9]/g, '') : '';
       )}
 
       {featured && (
-        <span class="absolute top-4 right-4 bg-brand-orange text-brand-dark text-sm font-heading font-extrabold px-4 py-1.5 rounded-full shadow">
+        <span class="absolute top-4 right-4 bg-brand-orange text-brand-dark text-sm font-heading font-extrabold px-4 py-1.5 rounded-full shadow z-10">
           ★ Featured Business
         </span>
       )}
@@ -68,7 +67,7 @@ const cleanWhatsapp = whatsapp ? whatsapp.replace(/[^0-9]/g, '') : '';
     <!-- Content Grid -->
     <div class="p-6 md:p-10 grid grid-cols-1 lg:grid-cols-3 gap-8">
       
-      <!-- Left Column: Details & Photos (2 cols wide on desktop) -->
+      <!-- Left Column: Details & Photos -->
       <div class="lg:col-span-2">
         <div class="flex flex-wrap items-center gap-2 text-sm font-medium text-brand-green mb-3">
           <span class="bg-brand-lightgreen px-3 py-1 rounded-md font-bold">{category}</span>
@@ -84,19 +83,23 @@ const cleanWhatsapp = whatsapp ? whatsapp.replace(/[^0-9]/g, '') : '';
           {description}
         </p>
 
-        <!-- Extra Photos Gallery (shows if there is more than 1 photo) -->
-        {photos && photos.length > 1 && (
+        <!-- Clickable Photo Gallery (Shows all photos, allowing users to click to view big above) -->
+        {photos && photos.length > 0 && (
           <div class="mt-8">
-            <h2 class="font-heading font-bold text-xl text-brand-dark mb-4">Photos</h2>
+            <h2 class="font-heading font-bold text-xl text-brand-dark mb-4">Photos (Click to view larger)</h2>
             <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-              {photos.slice(1).map((photo, index) => (
-                <div class="h-40 rounded-lg overflow-hidden bg-brand-lightgreen">
-                  <Image 
-                    src={photo} 
-                    alt={`${name} photo ${index + 2}`} 
-                    class="w-full h-full object-cover" 
+              {photos.map((photo, index) => (
+                <button 
+                  type="button"
+                  data-img-src={photo.src}
+                  class="gallery-thumb h-40 rounded-lg overflow-hidden bg-brand-lightgreen border-2 border-transparent hover:border-brand-orange transition-all cursor-pointer text-left p-0 focus:outline-none"
+                >
+                  <img 
+                    src={photo.src} 
+                    alt={`${name} photo ${index + 1}`} 
+                    class="w-full h-full object-cover pointer-events-none" 
                   />
-                </div>
+                </button>
               ))}
             </div>
           </div>
@@ -165,3 +168,23 @@ const cleanWhatsapp = whatsapp ? whatsapp.replace(/[^0-9]/g, '') : '';
     </div>
   </div>
 </Layout>
+
+<script>
+  // Simple gallery switcher script
+  const mainHeroImage = document.getElementById('main-hero-image') as HTMLImageElement;
+  const thumbs = document.querySelectorAll('.gallery-thumb');
+
+  thumbs.forEach((thumb) => {
+    thumb.addEventListener('click', () => {
+      const newSrc = thumb.getAttribute('data-img-src');
+      if (mainHeroImage && newSrc) {
+        // Smooth transition effect
+        mainHeroImage.style.opacity = '0.3';
+        setTimeout(() => {
+          mainHeroImage.src = newSrc;
+          mainHeroImage.style.opacity = '1';
+        }, 150);
+      }
+    });
+  });
+</script>
