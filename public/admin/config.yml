@@ -1,0 +1,41 @@
+backend:
+  name: github
+  repo: MichaelSimiyu-Truth/kisumu-sorted
+  branch: main
+  # This points to the authentication gateway we will set up in Step 2
+  auth_endpoint: https://kisumu-sorted-auth.keith-sm-wanjala.workers.dev
+
+media_folder: "src/assets/listings"
+public_folder: "../../assets/listings"
+
+collections:
+  - name: "listings"
+    label: "Business Listings"
+    folder: "src/content/listings"
+    create: true
+    format: "json"
+    fields:
+      - { label: "Business Name", name: "name", widget: "string" }
+      - { 
+          label: "Category", 
+          name: "category", 
+          widget: "select", 
+          options: ["Eat & Drink", "Places to Stay", "Places to Explore", "Places to Shop", "Music & Nightlife"] 
+        }
+      - { label: "Area / Neighborhood", name: "area", widget: "string" }
+      - { label: "Description", name: "description", widget: "text" }
+      - { label: "Phone Number", name: "phone", widget: "string", required: false }
+      - { label: "WhatsApp Number", name: "whatsapp", widget: "string", required: false }
+      - { label: "Street Address", name: "address", widget: "string", required: false }
+      - { label: "Map Link", name: "map_link", widget: "string", required: false }
+      - { label: "Photos", name: "photos", widget: "image", required: false, multiple: true }
+      - { label: "Featured Business", name: "featured", widget: "boolean", default: false }
+      - { label: "Featured Until", name: "featured_until", widget: "date", required: false, format: "YYYY-MM-DD" }
+      - { 
+          label: "Status", 
+          name: "status", 
+          widget: "select", 
+          options: ["pending", "live", "expired"], 
+          default: "pending" 
+        }
+      - { label: "Date Added", name: "date_added", widget: "date", format: "YYYY-MM-DD" }
