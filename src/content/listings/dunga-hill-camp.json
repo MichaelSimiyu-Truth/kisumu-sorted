@@ -1,19 +1,18 @@
 {
-  "name": "Dunga Hill Camp",
-  "category": "Eat & Drink",
-  "area": "Dunga Beach",
-  "description": "Lakeside restaurant, bar, and camping site offering fresh tilapia, sunset views over Lake Victoria, and live weekend music.",
-  "phone": "+254700111222",
-  "whatsapp": "254700111222",
-  "address": "Dunga Beach Road, Kisumu",
   "photos": [
     "../../assets/listings/dunga1.webp",
     "../../assets/listings/dunga2.jpg",
     "../../assets/listings/dunga3.jpg"
-
   ],
-  "featured": true,
+  "name": "Dunga Hill Camp",
   "featured_until": "2026-12-31",
+  "area": "Dunga Beach",
+  "featured": false,
+  "phone": "+254700111222",
+  "date_added": "2026-10-23",
+  "whatsapp": "254700111222",
   "status": "live",
-  "date_added": "2026-10-23"
+  "address": "Dunga Beach Road, Kisumu",
+  "description": "Lakeside restaurant, bar, and camping site offering fresh tilapia, sunset views over Lake Victoria, and live weekend music.",
+  "category": "Eat & Drink"
 }
