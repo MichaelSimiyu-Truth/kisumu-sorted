@@ -14,6 +14,7 @@ collections:
     folder: "src/content/listings"
     create: true
     format: "json"
+    slug: "{{name}}"
     fields:
       - { label: "Business Name", name: "name", widget: "string" }
       - { 
