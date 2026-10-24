@@ -29,9 +29,13 @@ collections:
       - { label: "WhatsApp Number", name: "whatsapp", widget: "string", required: false }
       - { label: "Street Address", name: "address", widget: "string", required: false }
       - { label: "Map Link", name: "map_link", widget: "string", required: false }
-      - { label: "Photos", name: "photos", widget: "image", required: false, multiple: true }
+      - name: "photos"
+        label: "Photos"
+        widget: "list"
+        required: false
+        field: { label: "Photo", name: "photo", widget: "image" }
       - { label: "Featured Business", name: "featured", widget: "boolean", default: false }
-      - { label: "Featured Until", name: "featured_until", widget: "datetime", required: false, format: "YYYY-MM-DD" }
+      - { label: "Featured Until", name: "featured_until", widget: "datetime", required: false, format: "YYYY-MM-DD", time_format: false }
       - { 
           label: "Status", 
           name: "status", 
@@ -39,4 +43,4 @@ collections:
           options: ["pending", "live", "expired"], 
           default: "pending" 
         }
-      - { label: "Date Added", name: "date_added", widget: "datetime", format: "YYYY-MM-DD" }
+      - { label: "Date Added", name: "date_added", widget: "datetime", format: "YYYY-MM-DD", time_format: false }
