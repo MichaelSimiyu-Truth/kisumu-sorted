@@ -1,13 +1,17 @@
 {
+  "photos": [
+    "../../assets/listings/acacia1.jpg",
+    "../../assets/listings/acacia2.jpg",
+    "../../assets/listings/acacia1.jpg"
+  ],
   "name": "Acacia Premier Hotel",
-  "category": "Places to Stay",
   "area": "Milimani",
-  "description": "Upscale hotel in the heart of Kisumu featuring a rooftop pool, lounge bar, and modern conference facilities.",
+  "featured": true,
   "phone": "+254741830877",
-  "whatsapp":"254741830877",
-  "address": "Achieng Oneko Rd, Kisumu",
-  "photos": [],
-  "featured": false,
+  "date_added": "2026-10-23",
+  "whatsapp": "254741830877",
   "status": "live",
-  "date_added": "2026-10-23"
+  "address": "Achieng Oneko Rd, Kisumu",
+  "description": "Upscale hotel in the heart of Kisumu featuring a rooftop pool, lounge bar, and modern conference facilities.",
+  "category": "Places to Stay"
 }
