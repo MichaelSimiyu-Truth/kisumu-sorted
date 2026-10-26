@@ -1,4 +1,9 @@
 {
+  "photos": [
+    "../../assets/listings/mountainview3.jpg",
+    "../../assets/listings/mountainview2.webp",
+    "../../assets/listings/mountainview1.webp"
+  ],
   "name": "Mountainview Backpackers",
   "area": "Kisumu",
   "featured": true,
