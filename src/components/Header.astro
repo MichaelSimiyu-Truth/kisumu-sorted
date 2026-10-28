@@ -2,11 +2,12 @@
 import { Image } from 'astro:assets';
 import logoImage from '../assets/logo.png'; 
 ---
-<!-- Added 'relative' so the dropdown positions correctly -->
-<header class="bg-brand-green text-white py-4 shadow-md border-b-4 border-brand-orange relative z-50">
+
+<!-- 1. Sticky Header applied -->
+<header id="site-header" class="bg-brand-green text-white py-4 shadow-md border-b-4 border-brand-orange sticky top-0 z-50 transition-colors">
   <div class="container mx-auto px-4 flex justify-between items-center max-w-5xl">
     
-    <a href="/" class="flex items-center hover:opacity-95 transition-opacity">
+    <a href="/" class="flex items-center hover:opacity-95 transition-opacity z-10">
       <Image 
         src={logoImage} 
         alt="Kisumu Sorted" 
@@ -15,31 +16,53 @@ import logoImage from '../assets/logo.png';
       />
     </a>
 
-    <!-- Desktop Navigation (Hidden on Mobile) -->
-    <nav class="hidden md:flex gap-6 font-body font-medium items-center">
-      <a href="/" class="hover:text-brand-orange transition-colors">Home</a>
-      <a href="/about" class="hover:text-brand-orange transition-colors">About</a>
-      <a href="/contact" class="hover:text-brand-orange transition-colors">Contact</a>
-      <a href="/apply" class="bg-brand-orange text-brand-dark px-5 py-2 rounded-full font-bold hover:bg-orange-500 transition-colors shadow-sm">
+    <!-- Desktop Navigation -->
+    <nav class="hidden md:flex gap-8 font-body font-medium items-center">
+      <!-- 5. Animated Underline on Hover -->
+      <a href="/" class="relative group hover:text-brand-orange transition-colors">
+        Home
+        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-brand-orange transition-all duration-300 group-hover:w-full"></span>
+      </a>
+      <a href="/about" class="relative group hover:text-brand-orange transition-colors">
+        About
+        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-brand-orange transition-all duration-300 group-hover:w-full"></span>
+      </a>
+      <a href="/contact" class="relative group hover:text-brand-orange transition-colors">
+        Contact
+        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-brand-orange transition-all duration-300 group-hover:w-full"></span>
+      </a>
+      <a href="/apply" class="bg-brand-orange text-brand-dark px-5 py-2 rounded-full font-bold hover:bg-orange-500 hover:-translate-y-0.5 transition-all shadow-sm">
         List your business
       </a>
     </nav>
 
-    <!-- Mobile Hamburger Button -->
-    <button id="menu-toggle" class="md:hidden flex items-center p-2 focus:outline-none" aria-label="Toggle Menu">
-      <svg class="w-8 h-8 fill-current" viewBox="0 0 24 24">
-        <path fill-rule="evenodd" clip-rule="evenodd" d="M4 6h16v2H4V6zm0 5h16v2H4v-2zm0 5h16v2H4v-2z" />
-      </svg>
+    <!-- 3 & 6. Mobile Hamburger Button (Accessible + Animated) -->
+    <button 
+      id="menu-toggle" 
+      class="md:hidden flex items-center justify-center w-10 h-10 focus:outline-none z-10" 
+      aria-label="Toggle Menu" 
+      aria-expanded="false"
+    >
+      <div class="relative w-6 h-5">
+        <span id="line-1" class="absolute block w-6 h-0.5 bg-white transition-all duration-300 top-0"></span>
+        <span id="line-2" class="absolute block w-6 h-0.5 bg-white transition-all duration-300 top-2"></span>
+        <span id="line-3" class="absolute block w-6 h-0.5 bg-white transition-all duration-300 top-4"></span>
+      </div>
     </button>
   </div>
 
-  <!-- Mobile Dropdown Menu -->
-  <nav id="mobile-menu" class="hidden absolute top-full left-0 w-full bg-brand-green border-b-4 border-brand-orange shadow-lg md:hidden">
-    <div class="flex flex-col px-4 py-6 space-y-4 font-body font-medium text-center">
-      <a href="/" class="hover:text-brand-orange transition-colors text-lg">Home</a>
-      <a href="/about" class="hover:text-brand-orange transition-colors text-lg">About</a>
-      <a href="/contact" class="hover:text-brand-orange transition-colors text-lg">Contact</a>
-      <a href="/apply" class="bg-brand-orange text-brand-dark px-5 py-3 rounded-full font-bold hover:bg-orange-500 transition-colors shadow-sm mt-2 w-3/4 mx-auto">
+  <!-- 2. Animated Mobile Menu -->
+  <!-- max-h-0 and opacity-0 start it hidden but allow CSS transitions to run smoothly -->
+  <nav 
+    id="mobile-menu" 
+    class="absolute top-full left-0 w-full bg-brand-green border-b border-brand-orange shadow-lg md:hidden overflow-hidden transition-all duration-300 max-h-0 opacity-0"
+  >
+    <!-- Right-aligned mobile links -->
+    <div class="flex flex-col px-6 py-6 space-y-6 font-body font-medium items-end text-right">
+      <a href="/" class="hover:text-brand-orange transition-colors text-xl mobile-link">Home</a>
+      <a href="/about" class="hover:text-brand-orange transition-colors text-xl mobile-link">About</a>
+      <a href="/contact" class="hover:text-brand-orange transition-colors text-xl mobile-link">Contact</a>
+      <a href="/apply" class="bg-brand-orange text-brand-dark px-6 py-3 rounded-full font-bold hover:bg-orange-500 transition-colors shadow-sm mt-4 mobile-link">
         List your business
       </a>
     </div>
@@ -47,13 +70,61 @@ import logoImage from '../assets/logo.png';
 </header>
 
 <script>
-  // Simple toggle logic for the mobile menu
   const menuToggle = document.getElementById('menu-toggle');
   const mobileMenu = document.getElementById('mobile-menu');
+  const line1 = document.getElementById('line-1');
+  const line2 = document.getElementById('line-2');
+  const line3 = document.getElementById('line-3');
+  const mobileLinks = document.querySelectorAll('.mobile-link');
+  const header = document.getElementById('site-header');
 
-  if (menuToggle && mobileMenu) {
-    menuToggle.addEventListener('click', () => {
-      mobileMenu.classList.toggle('hidden');
+  let isMenuOpen = false;
+
+  function toggleMenu() {
+    isMenuOpen = !isMenuOpen;
+    
+    // 6. Update Accessibility State
+    if (menuToggle) menuToggle.setAttribute('aria-expanded', isMenuOpen.toString());
+
+    // 2. Animate Mobile Menu Height & Opacity
+    if (isMenuOpen) {
+      mobileMenu?.classList.replace('max-h-0', 'max-h-[400px]');
+      mobileMenu?.classList.replace('opacity-0', 'opacity-100');
+      
+      // 3. Morph Hamburger into X
+      line1?.classList.add('rotate-45', 'translate-y-2');
+      line2?.classList.add('opacity-0');
+      line3?.classList.add('-rotate-45', '-translate-y-2');
+    } else {
+      mobileMenu?.classList.replace('max-h-[400px]', 'max-h-0');
+      mobileMenu?.classList.replace('opacity-100', 'opacity-0');
+      
+      // Restore Hamburger Lines
+      line1?.classList.remove('rotate-45', 'translate-y-2');
+      line2?.classList.remove('opacity-0');
+      line3?.classList.remove('-rotate-45', '-translate-y-2');
+    }
+  }
+
+  // Toggle on button click
+  if (menuToggle) {
+    menuToggle.addEventListener('click', (e) => {
+      e.stopPropagation(); 
+      toggleMenu();
     });
   }
+
+  // 4. Auto-Close when clicking a link
+  mobileLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      if (isMenuOpen) toggleMenu();
+    });
+  });
+
+  // 4. Auto-Close when clicking outside the header
+  document.addEventListener('click', (e) => {
+    if (isMenuOpen && header && !header.contains(e.target as Node)) {
+      toggleMenu();
+    }
+  });
 </script>
