@@ -3,61 +3,38 @@ import Layout from '../layouts/Layout.astro';
 ---
 
 <Layout title="Contact Us">
-  <div class="max-w-2xl mx-auto py-8">
+  <div class="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-md border-t-4 border-brand-orange mt-12 mb-20">
+    <h1 class="text-3xl font-bold text-brand-dark mb-2 font-body">Get in Touch</h1>
+    <p class="text-gray-600 mb-8 font-body">Have a question or want to suggest a new business for Kisumu Sorted? Drop us a message below.</p>
     
-    <!-- Heading -->
-    <div class="text-center mb-8">
-      <h1 class="font-heading font-extrabold text-3xl md:text-4xl text-brand-green mb-3">
-        Get in <span class="relative inline-block">
-          Touch
-          <span class="absolute bottom-1 left-0 w-full h-2 bg-brand-orange -z-10"></span>
-        </span>
-      </h1>
-      <p class="text-gray-600 font-body text-base">
-        Have a question, feedback, or need help updating your business listing? We'd love to hear from you.
-      </p>
-    </div>
-
-    <!-- Contact Grid / Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+    <form action="https://api.web3forms.com/submit" method="POST" class="space-y-6 font-body">
+      <!-- Replace YOUR_ACCESS_KEY with the key emailed to you -->
+      <input type="hidden" name="access_key" value="b56ba381-19d1-433e-9068-86a2d91c7eac">
       
-      <!-- WhatsApp Card -->
-      <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 text-center flex flex-col justify-between">
-        <div>
-          <div class="w-12 h-12 bg-brand-lightgreen text-brand-green rounded-full flex items-center justify-center mx-auto mb-4 font-bold text-xl">
-            💬
-          </div>
-          <h2 class="font-heading font-bold text-lg text-brand-dark mb-2">Chat on WhatsApp</h2>
-          <p class="text-gray-600 text-sm mb-4">Quickest way to reach our team for edits or inquiries.</p>
-        </div>
-        <a 
-          href="https://wa.me/254741830877?text=Hi%20Kisumu%20Sorted,%20I%20have%20an%20inquiry."
-          target="_blank"
-          rel="noopener noreferrer"
-          class="block bg-brand-green text-white font-bold py-2.5 px-4 rounded-xl text-sm hover:opacity-95 transition-opacity"
-        >
-          Open WhatsApp
-        </a>
+      <!-- Optional: Redirect to a custom success page, or leave this out to use the default success page -->
+      <!-- <input type="hidden" name="redirect" value="https://mpesa.site/success"> -->
+
+      <!-- Spam Protection -->
+      <input type="checkbox" name="botcheck" class="hidden" style="display: none;">
+
+      <div>
+        <label for="name" class="block text-sm font-medium text-brand-dark mb-1">Name</label>
+        <input type="text" id="name" name="name" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-brand-green focus:border-transparent outline-none transition-shadow">
       </div>
 
-      <!-- Email Card -->
-      <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 text-center flex flex-col justify-between">
-        <div>
-          <div class="w-12 h-12 bg-brand-lightgreen text-brand-green rounded-full flex items-center justify-center mx-auto mb-4 font-bold text-xl">
-            ✉️
-          </div>
-          <h2 class="font-heading font-bold text-lg text-brand-dark mb-2">Send an Email</h2>
-          <p class="text-gray-600 text-sm mb-4">For partnerships, feedback, and official requests.</p>
-        </div>
-        <a 
-          href="mailto:support@mpesa.site"
-          class="block bg-brand-lightgreen text-brand-dark font-bold py-2.5 px-4 rounded-xl text-sm hover:bg-green-200 transition-colors"
-        >
-          support@mpesa.site
-        </a>
+      <div>
+        <label for="email" class="block text-sm font-medium text-brand-dark mb-1">Email</label>
+        <input type="email" id="email" name="email" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-brand-green focus:border-transparent outline-none transition-shadow">
       </div>
 
-    </div>
+      <div>
+        <label for="message" class="block text-sm font-medium text-brand-dark mb-1">Message</label>
+        <textarea id="message" name="message" rows="5" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-brand-green focus:border-transparent outline-none transition-shadow"></textarea>
+      </div>
 
+      <button type="submit" class="w-full bg-brand-green text-white font-bold py-3 px-4 rounded-md hover:opacity-90 transition-opacity shadow-sm">
+        Send Message
+      </button>
+    </form>
   </div>
 </Layout>
