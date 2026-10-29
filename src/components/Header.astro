@@ -1,125 +1,138 @@
 ---
 import { Image } from 'astro:assets';
-import logoImage from '../assets/logo.png'; 
+import logoImage from '../assets/logo.png';
+
+// Links are defined once and used in both menus
+const links = [
+  { href: '/', label: 'Home' },
+  { href: '/about', label: 'About' },
+  { href: '/contact', label: 'Contact' },
+];
+const listHref = '/contact#get-listed';
+
+// Works out which page we are on, for the active-link style
+const path = Astro.url.pathname;
+const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
 ---
 
-<!-- 1. Sticky Header applied -->
-<header id="site-header" class="bg-brand-green text-white py-4 shadow-md border-b-4 border-brand-orange sticky top-0 z-50 transition-colors">
-  <div class="container mx-auto px-4 md:px-8 flex justify-between items-center max-w-7xl">
-    
-    <a href="/" class="flex items-center hover:opacity-95 transition-opacity z-10">
-      <Image 
-        src={logoImage} 
-        alt="Kisumu Sorted" 
-        class="h-10 w-auto object-contain" 
-        loading="eager"
-      />
+<header id="site-header" class="sticky top-0 z-50 border-b-4 border-brand-orange bg-brand-green py-4 text-white shadow-md">
+  <div class="container mx-auto flex max-w-7xl items-center justify-between px-4 md:px-8">
+
+    <a href="/" class="z-10 flex items-center transition-opacity hover:opacity-95" aria-label="Kisumu Sorted home">
+      <Image src={logoImage} alt="Kisumu Sorted" class="h-10 w-auto object-contain" loading="eager" />
     </a>
 
-    <!-- Desktop Navigation -->
-    <nav class="hidden md:flex gap-8 font-body font-medium items-center">
-      <!-- 5. Animated Underline on Hover -->
-      <a href="/" class="relative group hover:text-brand-orange transition-colors">
-        Home
-        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-brand-orange transition-all duration-300 group-hover:w-full"></span>
+    <!-- Desktop navigation -->
+    <nav class="hidden items-center gap-8 font-body font-medium md:flex" aria-label="Main">
+      {links.map((link) => (
+        <a
+          href={link.href}
+          aria-current={isActive(link.href) ? 'page' : undefined}
+          class={`group relative transition-colors hover:text-brand-orange ${isActive(link.href) ? 'text-brand-orange' : ''}`}
+        >
+          {link.label}
+          <!-- Underline: always shown on the current page, grows on hover for the others -->
+          <span class={`absolute -bottom-1 left-0 h-0.5 bg-brand-orange transition-all duration-300 ${isActive(link.href) ? 'w-full' : 'w-0 group-hover:w-full'}`}></span>
+        </a>
+      ))}
+      <a href={listHref} class="rounded-full bg-brand-orange px-5 py-2 font-bold text-brand-dark shadow-sm transition-colors hover:bg-brand-orange-dark">
+        List your business
       </a>
-      <a href="/about" class="relative group hover:text-brand-orange transition-colors">
-        About
-        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-brand-orange transition-all duration-300 group-hover:w-full"></span>
-      </a>
-      <a href="/contact" class="relative group hover:text-brand-orange transition-colors">
-        Contact
-        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-brand-orange transition-all duration-300 group-hover:w-full"></span>
-      </a>
-      
     </nav>
 
-    <!-- 3 & 6. Mobile Hamburger Button (Accessible + Animated) -->
-    <button 
-      id="menu-toggle" 
-      class="md:hidden flex items-center justify-center w-10 h-10 focus:outline-none z-10" 
-      aria-label="Toggle Menu" 
+    <!-- Mobile hamburger button (morphs into an X) -->
+    <button
+      id="menu-toggle"
+      type="button"
+      class="z-10 flex h-10 w-10 items-center justify-center rounded-lg md:hidden"
+      aria-label="Open menu"
       aria-expanded="false"
+      aria-controls="mobile-menu"
     >
-      <div class="relative w-6 h-5">
-        <span id="line-1" class="absolute block w-6 h-0.5 bg-white transition-all duration-300 top-0"></span>
-        <span id="line-2" class="absolute block w-6 h-0.5 bg-white transition-all duration-300 top-2"></span>
-        <span id="line-3" class="absolute block w-6 h-0.5 bg-white transition-all duration-300 top-4"></span>
+      <div class="relative h-5 w-6">
+        <span id="line-1" class="absolute top-0 block h-0.5 w-6 bg-white transition-all duration-300"></span>
+        <span id="line-2" class="absolute top-2 block h-0.5 w-6 bg-white transition-all duration-300"></span>
+        <span id="line-3" class="absolute top-4 block h-0.5 w-6 bg-white transition-all duration-300"></span>
       </div>
     </button>
   </div>
 
-  <!-- 2. Animated Mobile Menu -->
-  <!-- max-h-0 and opacity-0 start it hidden but allow CSS transitions to run smoothly -->
-  <nav 
-    id="mobile-menu" 
-    class="absolute top-full left-0 w-full bg-brand-green border-b border-brand-orange shadow-lg md:hidden overflow-hidden transition-all duration-300 max-h-0 opacity-0"
+  <!-- Mobile menu. "invisible" while closed keeps hidden links out of the keyboard tab order. -->
+  <nav
+    id="mobile-menu"
+    aria-label="Mobile"
+    class="invisible absolute left-0 top-full max-h-0 w-full overflow-hidden border-b border-brand-orange bg-brand-green opacity-0 shadow-lg transition-all duration-300 md:hidden"
   >
-    <!-- Right-aligned mobile links -->
-    <div class="flex flex-col px-6 py-6 space-y-6 font-body font-medium items-end text-right">
-      <a href="/" class="hover:text-brand-orange transition-colors text-xl mobile-link">Home</a>
-      <a href="/about" class="hover:text-brand-orange transition-colors text-xl mobile-link">About</a>
-      <a href="/contact" class="hover:text-brand-orange transition-colors text-xl mobile-link">Contact</a>
+    <div class="flex flex-col items-end px-6 py-4 text-right font-body font-medium">
+      {links.map((link) => (
+        <a
+          href={link.href}
+          aria-current={isActive(link.href) ? 'page' : undefined}
+          class={`mobile-link block py-3 pl-6 text-xl transition-colors hover:text-brand-orange ${isActive(link.href) ? 'text-brand-orange' : ''}`}
+        >
+          {link.label}
+        </a>
+      ))}
+      <a href={listHref} class="mobile-link mb-2 mt-3 rounded-full bg-brand-orange px-6 py-3 text-lg font-bold text-brand-dark hover:bg-brand-orange-dark">
+        List your business
+      </a>
     </div>
   </nav>
 </header>
 
 <script>
-  const menuToggle = document.getElementById('menu-toggle');
+  const menuToggle = document.getElementById('menu-toggle') as HTMLButtonElement | null;
   const mobileMenu = document.getElementById('mobile-menu');
+  const header = document.getElementById('site-header');
   const line1 = document.getElementById('line-1');
   const line2 = document.getElementById('line-2');
   const line3 = document.getElementById('line-3');
-  const mobileLinks = document.querySelectorAll('.mobile-link');
-  const header = document.getElementById('site-header');
 
   let isMenuOpen = false;
 
-  function toggleMenu() {
-    isMenuOpen = !isMenuOpen;
-    
-    // 6. Update Accessibility State
-    if (menuToggle) menuToggle.setAttribute('aria-expanded', isMenuOpen.toString());
+  function setMenu(open: boolean) {
+    isMenuOpen = open;
 
-    // 2. Animate Mobile Menu Height & Opacity
-    if (isMenuOpen) {
-      mobileMenu?.classList.replace('max-h-0', 'max-h-[400px]');
-      mobileMenu?.classList.replace('opacity-0', 'opacity-100');
-      
-      // 3. Morph Hamburger into X
-      line1?.classList.add('rotate-45', 'translate-y-2');
-      line2?.classList.add('opacity-0');
-      line3?.classList.add('-rotate-45', '-translate-y-2');
-    } else {
-      mobileMenu?.classList.replace('max-h-[400px]', 'max-h-0');
-      mobileMenu?.classList.replace('opacity-100', 'opacity-0');
-      
-      // Restore Hamburger Lines
-      line1?.classList.remove('rotate-45', 'translate-y-2');
-      line2?.classList.remove('opacity-0');
-      line3?.classList.remove('-rotate-45', '-translate-y-2');
-    }
+    // Tell assistive technology what state the button is in
+    menuToggle?.setAttribute('aria-expanded', String(open));
+    menuToggle?.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+
+    // Open or close the panel
+    mobileMenu?.classList.toggle('max-h-0', !open);
+    mobileMenu?.classList.toggle('opacity-0', !open);
+    mobileMenu?.classList.toggle('invisible', !open);
+    mobileMenu?.classList.toggle('max-h-[480px]', open);
+    mobileMenu?.classList.toggle('opacity-100', open);
+    mobileMenu?.classList.toggle('visible', open);
+
+    // Morph the hamburger into an X (and back)
+    line1?.classList.toggle('rotate-45', open);
+    line1?.classList.toggle('translate-y-2', open);
+    line2?.classList.toggle('opacity-0', open);
+    line3?.classList.toggle('-rotate-45', open);
+    line3?.classList.toggle('-translate-y-2', open);
   }
 
-  // Toggle on button click
-  if (menuToggle) {
-    menuToggle.addEventListener('click', (e) => {
-      e.stopPropagation(); 
-      toggleMenu();
-    });
-  }
-
-  // 4. Auto-Close when clicking a link
-  mobileLinks.forEach(link => {
-    link.addEventListener('click', () => {
-      if (isMenuOpen) toggleMenu();
-    });
+  menuToggle?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    setMenu(!isMenuOpen);
   });
 
-  // 4. Auto-Close when clicking outside the header
+  // Close when a link is tapped
+  document.querySelectorAll('.mobile-link').forEach((link) =>
+    link.addEventListener('click', () => { if (isMenuOpen) setMenu(false); })
+  );
+
+  // Close when tapping outside the header
   document.addEventListener('click', (e) => {
-    if (isMenuOpen && header && !header.contains(e.target as Node)) {
-      toggleMenu();
+    if (isMenuOpen && header && !header.contains(e.target as Node)) setMenu(false);
+  });
+
+  // Close with Escape, and hand focus back to the button
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && isMenuOpen) {
+      setMenu(false);
+      menuToggle?.focus();
     }
   });
 </script>

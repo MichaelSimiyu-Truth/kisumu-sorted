@@ -1,0 +1,14 @@
+---
+import { icons, type IconName } from '../lib/site';
+
+interface Props {
+  name: IconName;
+  class?: string;
+}
+
+const { name, class: className = 'h-6 w-6' } = Astro.props;
+---
+<!-- fill-current: the icon takes the text colour of whatever it sits in (e.g. text-brand-green) -->
+<svg class={`${className} fill-current`} viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+  <Fragment set:html={icons[name]} />
+</svg>
