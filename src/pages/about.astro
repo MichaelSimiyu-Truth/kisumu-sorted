@@ -1,54 +1,152 @@
+
 ---
 import Layout from '../layouts/Layout.astro';
 ---
 
-<Layout title="About">
-  <div class="max-w-3xl mx-auto py-8">
-    
-    <!-- Heading -->
-    <div class="text-center mb-10">
-      <h1 class="font-heading font-extrabold text-3xl md:text-4xl text-brand-green mb-3">
-        About <span class="relative inline-block">
-          Kisumu Sorted
-          <span class="absolute bottom-1 left-0 w-full h-2 bg-brand-orange -z-10"></span>
-        </span>
-      </h1>
-      <p class="text-gray-600 font-body text-base">
-        Connecting locals and visitors to the vibrant heartbeat of Kisumu.
+<Layout title="About Us">
+  <div class="mx-auto max-w-4xl py-4 md:py-8">
+
+    <!-- Page heading -->
+    <header class="mb-10 text-center md:mb-14">
+      <p class="mb-3 font-heading text-sm font-bold uppercase tracking-widest text-brand-green">
+        Get to know us
       </p>
-    </div>
 
-    <!-- Content Card -->
-    <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 md:p-10 space-y-6 text-gray-700 leading-relaxed font-body">
-      <div>
-        <h2 class="font-heading font-bold text-2xl text-brand-dark mb-3">Our Mission</h2>
+      <h1 class="font-heading text-3xl font-extrabold text-brand-green md:text-4xl">
+        About{' '}
+        <span>Kisumu Sorted</span>
+      </h1>
+
+      <p class="mx-auto mt-4 max-w-2xl font-body text-base leading-relaxed text-gray-600 md:text-lg">
+        Connecting locals and visitors with the places, businesses and
+        experiences that make Kisumu special.
+      </p>
+    </header>
+
+    <!-- Who we are -->
+    <section class="card mb-6">
+      <h2 class="section-title">Who We Are</h2>
+
+      <div class="mt-6 space-y-4 font-body leading-relaxed text-gray-700">
         <p>
-          Kisumu Sorted was built to solve a simple problem: finding reliable local businesses, cozy cafes, trusted stays, and hidden gems around Lake Victoria shouldn't feel like a chore. We provide a clean, fast, mobile-friendly directory that puts you in touch with local enterprises instantly via WhatsApp or phone calls.
+          Kisumu Sorted is a local discovery platform that helps people
+          find businesses, places to stay, places to eat and other
+          experiences around Kisumu.
+        </p>
+
+        <p>
+          Whether you're a resident looking for somewhere new to explore
+          or a visitor discovering the city, our goal is to make finding
+          local places simpler and more convenient.
+        </p>
+
+        <p>
+          We also provide local businesses with another way to showcase
+          their offerings, improve their online visibility and connect
+          with potential customers.
         </p>
       </div>
+    </section>
 
-      <div class="border-t border-gray-100 pt-6">
-        <h2 class="font-heading font-bold text-2xl text-brand-dark mb-3">Built for Kisumu</h2>
-        <p>
-          Whether you are looking for fresh tilapia by the lake, a quiet place to work in Milimani, or weekend nightlife in the CBD, our directory is tailored specifically for the community. Every listing is curated to help local businesses thrive in a digital-first economy.
-        </p>
-      </div>
+    <!-- Mission -->
+    <section class="card mb-6">
+      <h2 class="section-title">Our Mission</h2>
 
-      <div class="border-t border-gray-100 pt-6">
-        <h2 class="font-heading font-bold text-2xl text-brand-dark mb-3">Get Involved</h2>
-        <p>
-          Are you a local business owner? Getting listed is quick and easy. Head over to our application page to submit your details and join the platform.
-        </p>
-        <div class="mt-4">
-          <a 
-            href="/apply" 
-            class="inline-block bg-brand-orange text-brand-dark font-heading font-bold px-6 py-3 rounded-xl hover:bg-orange-500 transition-colors shadow-sm"
-          >
-            List your business
-          </a>
-        </div>
+      <p class="mt-6 font-body leading-relaxed text-gray-700">
+        To make discovering local businesses and experiences in Kisumu
+        easier, while helping businesses reach more people through an
+        accessible online directory.
+      </p>
+    </section>
+
+    <!-- Vision -->
+    <section class="card mb-6">
+      <h2 class="section-title">Our Vision</h2>
+
+      <p class="mt-6 font-body leading-relaxed text-gray-700">
+        To become a go-to guide for discovering what Kisumu has to offer,
+        connecting residents and visitors with local businesses, places
+        and experiences across the city.
+      </p>
+    </section>
+
+    <!-- What visitors can discover -->
+    <section class="card mb-6">
+      <h2 class="section-title">What You Can Discover</h2>
+
+      <p class="mt-6 font-body leading-relaxed text-gray-600">
+        We're bringing different parts of Kisumu's local scene together
+        to make it easier to find your next place to visit or business
+        to connect with.
+      </p>
+
+      <div class="mt-6 grid gap-4 sm:grid-cols-2">
+
+        <article class="rounded-2xl bg-brand-lightgreen p-5">
+          <h3 class="font-heading text-lg font-bold text-brand-green">
+            Local Businesses
+          </h3>
+          <p class="mt-2 font-body text-sm leading-relaxed text-gray-700">
+            Discover shops, services and other businesses around Kisumu.
+          </p>
+        </article>
+
+        <article class="rounded-2xl bg-brand-lightgreen p-5">
+          <h3 class="font-heading text-lg font-bold text-brand-green">
+            Places to Stay
+          </h3>
+          <p class="mt-2 font-body text-sm leading-relaxed text-gray-700">
+            Explore accommodation options for visits, holidays and getaways.
+          </p>
+        </article>
+
+        <article class="rounded-2xl bg-brand-lightgreen p-5">
+          <h3 class="font-heading text-lg font-bold text-brand-green">
+            Food and Hangout Spots
+          </h3>
+          <p class="mt-2 font-body text-sm leading-relaxed text-gray-700">
+            Find places to eat, relax and spend time with friends.
+          </p>
+        </article>
+
+        <article class="rounded-2xl bg-brand-lightgreen p-5">
+          <h3 class="font-heading text-lg font-bold text-brand-green">
+            Local Experiences
+          </h3>
+          <p class="mt-2 font-body text-sm leading-relaxed text-gray-700">
+            Discover more of the places and experiences that make Kisumu
+            worth exploring.
+          </p>
+        </article>
+
       </div>
-    </div>
+    </section>
+
+    <!-- For business owners -->
+    <section class="card">
+      <h2 class="section-title">Are You a Business Owner?</h2>
+
+      <p class="mt-6 font-body leading-relaxed text-gray-700">
+        Give more people a chance to discover your business. Kisumu Sorted
+        offers local businesses a platform to showcase what they do and
+        help potential customers find their contact details.
+      </p>
+
+      <p class="mt-4 font-body leading-relaxed text-gray-700">
+        Interested in being listed? Get in touch with us to learn more
+        about the listing options available for your business.
+      </p>
+
+      <div class="mt-6 flex flex-col gap-3 sm:flex-row">
+        <a href="/contact#get-listed" class="btn-primary">
+          Get your business listed
+        </a>
+
+        <a href="/#discover" class="btn-secondary">
+          Explore the directory
+        </a>
+      </div>
+    </section>
 
   </div>
 </Layout>
