@@ -44,7 +44,7 @@ const ogImage = photos && photos.length > 0 ? photos[0].src : undefined;
 
   <!-- Airbnb-Style Photo Mosaic Hero -->
 <!-- Responsive Photo Gallery Hero -->
-  <div class="relative rounded-3xl overflow-hidden mb-10 bg-brand-lightgreen h-72 md:h-[450px] shadow-sm group">
+  <div class="relative rounded-3xl overflow-hidden mb-10 bg-brand-lightgreen h-72 md:h-112.5 shadow-sm group">
     {featured && (
       <span class="absolute top-4 left-4 bg-brand-orange text-brand-dark text-xs font-heading font-extrabold px-4 py-2 rounded-full shadow-md z-20 pointer-events-none">
         ★ Featured Business
@@ -56,17 +56,17 @@ const ogImage = photos && photos.length > 0 ? photos[0].src : undefined;
         
         {/* Main Photo (Left on Desktop, 1st on Mobile) */}
         <button type="button" data-img-src={photos[0].src} class="gallery-thumb shrink-0 w-full md:w-auto h-full snap-center md:col-span-3 relative cursor-pointer border-0 p-0 focus:outline-none bg-brand-dark/5">
-          <Image src={photos[0]} alt={name} class="absolute inset-0 w-full h-full object-cover object-center group-hover:brightness-95 hover:!brightness-100 transition-all duration-300" />
+          <Image src={photos[0]} alt={name} class="absolute inset-0 w-full h-full object-cover object-center group-hover:brightness-95 hover:brightness-100! transition-all duration-300" />
           <div class="absolute bottom-4 right-4 bg-black/70 text-white text-xs font-bold px-3 py-1 rounded-full md:hidden z-10">1 / {photos.length}</div>
         </button>
         
         {/* Desktop Stack (Hidden on Mobile) */}
         <div class="hidden md:grid grid-rows-2 gap-2 h-full w-full">
           <button type="button" data-img-src={photos[1].src} class="gallery-thumb relative cursor-pointer border-0 p-0 focus:outline-none bg-brand-dark/5">
-            <Image src={photos[1]} alt={name} class="absolute inset-0 w-full h-full object-cover object-center group-hover:brightness-95 hover:!brightness-100 transition-all duration-300" />
+            <Image src={photos[1]} alt={name} class="absolute inset-0 w-full h-full object-cover object-center group-hover:brightness-95 hover:brightness-100! transition-all duration-300" />
           </button>
           <button type="button" data-img-src={photos[2].src} class="gallery-thumb relative cursor-pointer border-0 p-0 focus:outline-none bg-brand-dark/5">
-            <Image src={photos[2]} alt={name} class="absolute inset-0 w-full h-full object-cover object-center group-hover:brightness-95 hover:!brightness-100 transition-all duration-300" />
+            <Image src={photos[2]} alt={name} class="absolute inset-0 w-full h-full object-cover object-center group-hover:brightness-95 hover:brightness-100! transition-all duration-300" />
             {photos.length > 3 && (
               <div class="absolute inset-0 bg-brand-dark/50 flex items-center justify-center text-white font-heading font-bold text-xl hover:bg-brand-dark/40 transition-colors z-10">
                 +{photos.length - 3} more
@@ -239,6 +239,7 @@ const ogImage = photos && photos.length > 0 ? photos[0].src : undefined;
   const closeModal = document.getElementById('close-modal');
   const thumbs = document.querySelectorAll('.gallery-thumb');
 
+  // Modal Logic
   thumbs.forEach((thumb) => {
     thumb.addEventListener('click', () => {
       const src = thumb.getAttribute('data-img-src');
@@ -259,15 +260,35 @@ const ogImage = photos && photos.length > 0 ? photos[0].src : undefined;
         modal.classList.add('hidden');
         modal.classList.remove('flex');
         document.body.style.overflow = '';
-      }, 200); // Wait for scale animation before hiding
+      }, 200);
     }
   }
 
-  closeModal?.addEventListener('click', closeLightbox);
+  closeModal?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    closeLightbox();
+  });
   modal?.addEventListener('click', (e) => {
     if (e.target === modal) closeLightbox();
   });
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') closeLightbox();
   });
+
+  // Mobile Carousel Navigation Logic
+  const carousel = document.getElementById('photo-carousel');
+  const prevBtn = document.getElementById('carousel-prev');
+  const nextBtn = document.getElementById('carousel-next');
+
+  if (carousel && prevBtn && nextBtn) {
+    prevBtn.addEventListener('click', (e) => {
+      e.stopPropagation(); // Prevents the modal from opening
+      carousel.scrollBy({ left: -carousel.clientWidth, behavior: 'smooth' });
+    });
+    
+    nextBtn.addEventListener('click', (e) => {
+      e.stopPropagation(); // Prevents the modal from opening
+      carousel.scrollBy({ left: carousel.clientWidth, behavior: 'smooth' });
+    });
+  }
 </script>
