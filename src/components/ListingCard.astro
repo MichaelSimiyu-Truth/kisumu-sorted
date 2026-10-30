@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
+import Icon from './Icon.astro';
 
 interface Props {
   listing: CollectionEntry<'listings'>;
@@ -12,11 +13,11 @@ const { name, category, area, description, phone, whatsapp, photos, featured } =
 const cleanWhatsapp = whatsapp ? whatsapp.replace(/[^0-9]/g, '') : '';
 ---
 
-<!-- Added 'relative group cursor-pointer' to the article container -->
+<!-- Added focus-within for keyboard accessibility -->
 <article 
   data-category={category}
   data-search={`${name} ${area} ${description}`.toLowerCase()}
-  class={`listing-card relative group cursor-pointer rounded-xl bg-white shadow-sm border transition-all hover:shadow-md hover:-translate-y-0.5 overflow-hidden flex flex-col justify-between ${featured ? 'border-brand-orange border-2' : 'border-gray-200'}`}
+  class={`listing-card relative group cursor-pointer rounded-xl bg-white shadow-sm border transition-all hover:shadow-md hover:-translate-y-0.5 focus-within:ring-2 focus-within:ring-brand-orange focus-within:ring-offset-2 overflow-hidden flex flex-col justify-between ${featured ? 'border-brand-orange border-2' : 'border-gray-200'}`}
 >
   <div>
     <!-- Cover Photo or Branded Fallback -->
@@ -34,7 +35,7 @@ const cleanWhatsapp = whatsapp ? whatsapp.replace(/[^0-9]/g, '') : '';
       )}
 
       {featured && (
-        <span class="absolute top-3 right-3 bg-brand-orange text-brand-dark text-xs font-heading font-extrabold px-3 py-1 rounded-full shadow-sm">
+        <span class="absolute top-3 right-3 bg-brand-orange text-brand-dark text-xs font-heading font-extrabold px-3 py-1 rounded-full shadow-sm z-10">
           ★ Featured
         </span>
       )}
@@ -43,33 +44,36 @@ const cleanWhatsapp = whatsapp ? whatsapp.replace(/[^0-9]/g, '') : '';
     <!-- Card Body -->
     <div class="p-5">
       <div class="flex items-center gap-2 text-xs font-medium text-brand-green mb-2">
-        <span class="bg-brand-lightgreen px-2.5 py-1 rounded-md font-semibold">{category}</span>
-        <span>•</span>
+        <span class="bg-brand-lightgreen px-2.5 py-1 rounded-md font-semibold border border-brand-green/20">{category}</span>
+        <span class="text-gray-400">•</span>
         <span class="text-gray-600">{area}</span>
       </div>
 
       <h3 class="font-heading font-bold text-xl text-brand-dark mb-2">
         <!-- 'after:absolute after:inset-0' stretches this link over the whole card -->
-        <a href={`/listings/${listing.id}`} class="group-hover:text-brand-green transition-colors after:absolute after:inset-0">
+        <!-- 'focus:outline-none' removes the default outline since the card handles it -->
+        <a href={`/listings/${listing.id}`} class="group-hover:text-brand-green transition-colors after:absolute after:inset-0 focus:outline-none">
           {name}
         </a>
       </h3>
 
-      <p class="text-sm text-gray-600 line-clamp-2 mb-4">
+      <p class="text-sm text-gray-600 line-clamp-2 mb-4 font-body">
         {description}
       </p>
     </div>
   </div>
 
-  <!-- Action Buttons: 'relative z-10' sits ABOVE the stretched card link so they remain clickable on their own -->
-  <div class="relative z-10 px-5 pb-5 pt-2 flex gap-2 border-t border-gray-100">
+  <!-- Action Buttons: 'relative z-20' sits ABOVE the stretched card link so they remain clickable -->
+  <div class="relative z-20 px-5 pb-5 pt-2 flex gap-2 border-t border-gray-100">
     {cleanWhatsapp && (
       <a 
         href={`https://wa.me/${cleanWhatsapp}?text=${encodeURIComponent(`Hi ${name}, I found you on Kisumu Sorted.`)}`}
         target="_blank"
         rel="noopener noreferrer"
-        class="flex-1 bg-brand-green text-white text-center text-sm font-bold py-2.5 px-3 rounded-lg hover:opacity-95 transition-opacity"
+        class="flex-1 flex items-center justify-center gap-2 bg-brand-green text-white text-sm font-bold py-2.5 px-3 rounded-lg hover:bg-green-800 transition-colors focus:ring-2 focus:ring-offset-1 focus:ring-brand-green outline-none shadow-sm"
+        aria-label={`WhatsApp ${name}`}
       >
+        <Icon name="whatsapp" class="w-4 h-4" />
         WhatsApp
       </a>
     )}
@@ -77,8 +81,10 @@ const cleanWhatsapp = whatsapp ? whatsapp.replace(/[^0-9]/g, '') : '';
     {phone && (
       <a 
         href={`tel:${phone}`}
-        class="flex-1 bg-brand-lightgreen text-brand-dark text-center text-sm font-bold py-2.5 px-3 rounded-lg hover:bg-green-200 transition-colors"
+        class="flex-1 flex items-center justify-center gap-2 bg-brand-lightgreen text-brand-dark text-sm font-bold py-2.5 px-3 rounded-lg hover:bg-green-200 transition-colors focus:ring-2 focus:ring-offset-1 focus:ring-brand-green outline-none border border-brand-green/20 shadow-sm"
+        aria-label={`Call ${name}`}
       >
+        <Icon name="phone" class="w-4 h-4 text-brand-green" />
         Call
       </a>
     )}
