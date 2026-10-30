@@ -4,10 +4,12 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 
 interface Props {
-	title: string;
+  title: string;
+  description?: string;
+  image?: string;
 }
 
-const { title } = Astro.props;
+const { title, description = "Kisumu local business directory", image = "/apple-touch-icon.png" } = Astro.props;
 ---
 
 <!doctype html>
@@ -17,6 +19,9 @@ const { title } = Astro.props;
 		<meta name="theme-color" content="#194C10" />
 		<meta name="description" content="Kisumu local business directory" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta property="og:title" content={`${title} | Kisumu Sorted`} />
+		<meta property="og:description" content={description} />
+		<meta property="og:image" content={new URL(image, Astro.site || Astro.url)} />
 		<link rel="icon" href="/favicon.ico" sizes="48x48" />
 		<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
 		<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />

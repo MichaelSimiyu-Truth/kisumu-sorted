@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
 import Layout from '../../layouts/Layout.astro';
+import Icon from '../../components/Icon.astro';
 
 export async function getStaticPaths() {
   const listings = await getCollection('listings', ({ data }) => {
@@ -29,98 +30,114 @@ const {
 } = listing.data;
 
 const cleanWhatsapp = whatsapp ? whatsapp.replace(/[^0-9]/g, '') : '';
+const ogImage = photos && photos.length > 0 ? photos[0].src : undefined;
 ---
 
-<Layout title={name}>
+<Layout title={name} description={description} image={ogImage}>
   <!-- Back Link -->
   <div class="mb-6">
-    <a href="/" class="inline-flex items-center gap-1 text-sm font-semibold text-brand-green hover:text-brand-orange transition-colors">
-      &larr; Back to all businesses
+    <a href="/" class="inline-flex items-center gap-2 text-sm font-bold text-brand-green hover:text-brand-orange transition-colors">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+      Back to directory
     </a>
   </div>
 
-  <!-- Main Listing Container -->
-  <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-    
-    <!-- Hero Photo or Branded Fallback -->
-    <div class="relative h-64 md:h-96 bg-brand-lightgreen flex items-center justify-center overflow-hidden">
-      {photos && photos.length > 0 ? (
-        <img 
-          src={photos[0].src} 
-          alt={name} 
-          class="w-full h-full object-cover"
-        />
-      ) : (
-        <span class="text-brand-green/40 font-heading font-extrabold text-3xl">
-          Kisumu Sorted.
-        </span>
-      )}
+  <!-- Airbnb-Style Photo Mosaic Hero -->
+  <div class="relative rounded-3xl overflow-hidden mb-10 bg-brand-lightgreen h-64 md:h-112.5 shadow-sm">
+    {featured && (
+      <span class="absolute top-4 left-4 bg-brand-orange text-brand-dark text-xs font-heading font-extrabold px-4 py-2 rounded-full shadow-md z-20">
+        ★ Featured Business
+      </span>
+    )}
 
-      {featured && (
-        <span class="absolute top-4 right-4 bg-brand-orange text-brand-dark text-sm font-heading font-extrabold px-4 py-1.5 rounded-full shadow z-10">
-          ★ Featured Business
-        </span>
+    {photos && photos.length >= 3 ? (
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-2 h-full">
+        <!-- Main Large Photo -->
+        <button type="button" data-img-src={photos[0].src} class="gallery-thumb md:col-span-3 h-full w-full relative group cursor-pointer border-0 p-0 overflow-hidden focus:outline-none focus:ring-4 focus:ring-brand-orange focus:ring-inset">
+          <Image src={photos[0]} alt={name} class="w-full h-full object-cover group-hover:scale-105 group-hover:brightness-95 transition-all duration-500" />
+        </button>
+        <!-- Stacked Right Photos -->
+        <div class="hidden md:flex flex-col gap-2 h-full">
+          <button type="button" data-img-src={photos[1].src} class="gallery-thumb h-1/2 w-full relative group cursor-pointer border-0 p-0 overflow-hidden focus:outline-none focus:ring-4 focus:ring-brand-orange focus:ring-inset">
+            <Image src={photos[1]} alt={name} class="w-full h-full object-cover group-hover:scale-105 group-hover:brightness-95 transition-all duration-500" />
+          </button>
+          <button type="button" data-img-src={photos[2].src} class="gallery-thumb h-1/2 w-full relative group cursor-pointer border-0 p-0 overflow-hidden focus:outline-none focus:ring-4 focus:ring-brand-orange focus:ring-inset">
+            <Image src={photos[2]} alt={name} class="w-full h-full object-cover group-hover:scale-105 group-hover:brightness-95 transition-all duration-500" />
+            {photos.length > 3 && (
+              <div class="absolute inset-0 bg-brand-dark/50 flex items-center justify-center text-white font-heading font-bold text-xl group-hover:bg-brand-dark/40 transition-colors">
+                +{photos.length - 3} more
+              </div>
+            )}
+          </button>
+        </div>
+      </div>
+    ) : photos && photos.length > 0 ? (
+      <button type="button" data-img-src={photos[0].src} class="gallery-thumb h-full w-full relative group cursor-pointer border-0 p-0 overflow-hidden focus:outline-none">
+        <Image src={photos[0]} alt={name} class="w-full h-full object-cover group-hover:scale-105 transition-all duration-500" />
+      </button>
+    ) : (
+      <div class="flex items-center justify-center h-full">
+        <span class="text-brand-green/40 font-heading font-extrabold text-4xl">Kisumu Sorted.</span>
+      </div>
+    )}
+  </div>
+
+  <!-- Content Grid -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+    
+    <!-- Left Column: Details & Extra Photos -->
+    <div class="lg:col-span-2">
+      <div class="flex flex-wrap items-center gap-2 text-sm font-medium text-brand-green mb-4">
+        <span class="bg-brand-lightgreen px-3 py-1 rounded-md font-bold border border-brand-green/20">{category}</span>
+        <span class="text-gray-400">•</span>
+        <span class="text-gray-600 font-semibold">{area}</span>
+      </div>
+
+      <h1 class="font-heading font-extrabold text-3xl md:text-5xl text-brand-dark mb-6 leading-tight">
+        {name}
+      </h1>
+
+      <div class="prose prose-lg text-gray-700 leading-relaxed whitespace-pre-line mb-10 max-w-none font-body">
+        {description}
+      </div>
+
+      <!-- Extra Gallery Thumbnails (Only show if > 3 photos) -->
+      {photos && photos.length > 3 && (
+        <div class="mt-10 border-t border-gray-100 pt-8">
+          <h2 class="font-heading font-bold text-2xl text-brand-dark mb-6">More Photos</h2>
+          <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+            {photos.slice(3).map((photo, index) => (
+              <button 
+                type="button"
+                data-img-src={photo.src}
+                class="gallery-thumb h-48 rounded-2xl overflow-hidden bg-brand-lightgreen border-2 border-transparent hover:border-brand-orange transition-all cursor-pointer p-0 focus:outline-none shadow-sm"
+              >
+                <Image src={photo} alt={`${name} photo ${index + 4}`} class="w-full h-full object-cover pointer-events-none" />
+              </button>
+            ))}
+          </div>
+        </div>
       )}
     </div>
 
-    <!-- Content Grid -->
-    <div class="p-6 md:p-10 grid grid-cols-1 lg:grid-cols-3 gap-8">
-      
-      <!-- Left Column: Details & Photos -->
-      <div class="lg:col-span-2">
-        <div class="flex flex-wrap items-center gap-2 text-sm font-medium text-brand-green mb-3">
-          <span class="bg-brand-lightgreen px-3 py-1 rounded-md font-bold">{category}</span>
-          <span>•</span>
-          <span class="text-gray-600 font-semibold">{area}</span>
-        </div>
-
-        <h1 class="font-heading font-extrabold text-3xl md:text-4xl text-brand-dark mb-4">
-          {name}
-        </h1>
-
-        <p class="text-gray-700 leading-relaxed whitespace-pre-line text-base md:text-lg mb-8">
-          {description}
-        </p>
-
-        <!-- Clickable Photo Gallery Thumbnails -->
-        {photos && photos.length > 0 && (
-          <div class="mt-8">
-            <h2 class="font-heading font-bold text-xl text-brand-dark mb-4">Photos (Tap to view full screen)</h2>
-            <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-              {photos.map((photo, index) => (
-                <button 
-                  type="button"
-                  data-img-src={photo.src}
-                  class="gallery-thumb h-40 rounded-lg overflow-hidden bg-brand-lightgreen border-2 border-transparent hover:border-brand-orange transition-all cursor-pointer text-left p-0 focus:outline-none shadow-sm"
-                >
-                  <img 
-                    src={photo.src} 
-                    alt={`${name} photo ${index + 1}`} 
-                    class="w-full h-full object-cover pointer-events-none" 
-                  />
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
-
-      <!-- Right Column: Contact & Location Box -->
-      <div class="bg-brand-offwhite p-6 rounded-xl border border-gray-200 h-fit">
-        <h2 class="font-heading font-bold text-lg text-brand-dark mb-4">
+    <!-- Right Column: Sticky Contact Sidebar -->
+    <div class="relative">
+      <div class="bg-white p-8 rounded-3xl border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.06)] sticky top-28">
+        <h2 class="font-heading font-bold text-xl text-brand-dark mb-2">
           Contact & Location
-          <span class="block w-8 h-1 bg-brand-orange mt-1 rounded"></span>
         </h2>
+        <span class="block w-10 h-1 bg-brand-orange mb-6 rounded"></span>
 
         <!-- Primary Action Buttons -->
-        <div class="flex flex-col gap-3 mb-6">
+        <div class="flex flex-col gap-4 mb-8">
           {cleanWhatsapp && (
             <a 
               href={`https://wa.me/${cleanWhatsapp}?text=${encodeURIComponent(`Hi ${name}, I found your business on Kisumu Sorted.`)}`}
               target="_blank"
               rel="noopener noreferrer"
-              class="w-full bg-brand-green text-white text-center font-bold py-3 px-4 rounded-xl hover:opacity-95 transition-opacity shadow-sm"
+              class="flex items-center justify-center gap-3 w-full bg-brand-green text-white font-bold py-3.5 px-4 rounded-xl hover:bg-green-800 transition-colors shadow-md shadow-brand-green/20"
             >
+              <Icon name="whatsapp" class="w-5 h-5" />
               Chat on WhatsApp
             </a>
           )}
@@ -128,56 +145,67 @@ const cleanWhatsapp = whatsapp ? whatsapp.replace(/[^0-9]/g, '') : '';
           {phone && (
             <a 
               href={`tel:${phone}`}
-              class="w-full bg-brand-orange text-brand-dark text-center font-bold py-3 px-4 rounded-xl hover:bg-orange-500 transition-colors shadow-sm"
+              class="flex items-center justify-center gap-3 w-full bg-brand-lightgreen border border-brand-green/20 text-brand-dark font-bold py-3.5 px-4 rounded-xl hover:bg-green-200 transition-colors shadow-sm"
             >
+              <Icon name="phone" class="w-5 h-5 text-brand-green" />
               Call {phone}
             </a>
           )}
         </div>
 
-        <!-- Address & Map Details -->
-        <div class="space-y-3 text-sm border-t border-gray-200 pt-4">
-          <div>
-            <span class="font-bold text-gray-900 block">Area:</span>
-            <span class="text-gray-600">{area}, Kisumu</span>
+        <!-- Address Details -->
+        <div class="space-y-4 text-sm font-body">
+          <div class="flex items-start gap-3">
+            <div class="mt-0.5 w-5 h-5 shrink-0 text-gray-400">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+            </div>
+            <div>
+              <span class="font-bold text-brand-dark block mb-0.5">Area</span>
+              <span class="text-gray-600">{area}, Kisumu</span>
+            </div>
           </div>
 
           {address && (
-            <div>
-              <span class="font-bold text-gray-900 block">Address:</span>
-              <span class="text-gray-600">{address}</span>
+            <div class="flex items-start gap-3">
+              <div class="mt-0.5 w-5 h-5 shrink-0 text-gray-400">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+              </div>
+              <div>
+                <span class="font-bold text-brand-dark block mb-0.5">Address</span>
+                <span class="text-gray-600">{address}</span>
+              </div>
             </div>
           )}
 
           {map_link && (
-            <div class="pt-2">
+            <div class="pt-4 mt-4 border-t border-gray-100">
               <a 
                 href={map_link}
                 target="_blank"
                 rel="noopener noreferrer"
-                class="inline-block text-brand-green font-bold underline hover:text-brand-orange transition-colors"
+                class="flex items-center gap-2 text-brand-orange font-bold hover:text-orange-600 transition-colors"
               >
-                Open in Google Maps &rarr;
+                Open in Google Maps 
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
               </a>
             </div>
           )}
         </div>
       </div>
-
     </div>
   </div>
 
-  <!-- Full-Screen Lightbox Modal (Hidden by default) -->
-  <div id="image-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4">
+  <!-- Full-Screen Lightbox Modal -->
+  <div id="image-modal" class="fixed inset-0 z-50 bg-brand-dark/95 backdrop-blur-sm hidden items-center justify-center p-4 md:p-8">
     <button 
       type="button" 
       id="close-modal" 
-      class="absolute top-5 right-5 text-white bg-black/50 hover:bg-black w-10 h-10 rounded-full font-bold text-xl flex items-center justify-center cursor-pointer transition-colors"
+      class="absolute top-6 right-6 text-brand-dark bg-white hover:bg-gray-100 w-12 h-12 rounded-full font-bold text-2xl flex items-center justify-center cursor-pointer transition-colors shadow-lg z-10"
       aria-label="Close modal"
     >
       &times;
     </button>
-    <img id="modal-img" src="" alt="Enlarged view" class="max-w-full max-h-[90vh] object-contain rounded-xl shadow-2xl scale-95 transition-transform duration-300" />
+    <img id="modal-img" src="" alt="Enlarged view" class="max-w-full max-h-full object-contain rounded-lg shadow-2xl scale-95 transition-transform duration-300" />
   </div>
 </Layout>
 
@@ -203,9 +231,11 @@ const cleanWhatsapp = whatsapp ? whatsapp.replace(/[^0-9]/g, '') : '';
   function closeLightbox() {
     if (modal && modalImg) {
       modalImg.classList.add('scale-95');
-      modal.classList.add('hidden');
-      modal.classList.remove('flex');
-      document.body.style.overflow = '';
+      setTimeout(() => {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+        document.body.style.overflow = '';
+      }, 200); // Wait for scale animation before hiding
     }
   }
 
