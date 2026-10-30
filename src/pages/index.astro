@@ -27,53 +27,38 @@ const categories = [
 ---
 
 <Layout title="Home">
-<!-- Compact Premium Hero Section -->
-  <div class="relative bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 overflow-hidden px-4 py-8 md:px-6 md:py-12 text-center mb-6 md:mb-10">
+<!-- Inline Search Hero Section -->
+  <div class="pt-4 pb-6 md:pt-10 md:pb-8 text-center px-2">
+    <span class="inline-block py-1 px-3 md:py-1.5 md:px-4 rounded-full bg-brand-orange/10 text-brand-orange text-[10px] md:text-xs font-bold tracking-wider uppercase mb-3 border border-brand-orange/20">
+      Discover the City
+    </span>
     
-    <!-- Faint Background Watermarks -->
-    <div class="absolute -left-16 -top-16 opacity-[0.03] pointer-events-none">
-      <svg class="w-64 h-64 md:w-80 md:h-80 fill-brand-dark" viewBox="0 0 24 24">
-        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-      </svg>
-    </div>
-    <div class="absolute -right-16 -bottom-16 opacity-[0.03] pointer-events-none">
-      <svg class="w-64 h-64 md:w-80 md:h-80 fill-brand-dark" viewBox="0 0 24 24">
-        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-      </svg>
-    </div>
-
-    <div class="relative z-10">
-      <span class="inline-block py-1 px-3 md:py-1.5 md:px-4 rounded-full bg-brand-orange/10 text-brand-orange text-[10px] md:text-xs font-bold tracking-wider uppercase mb-3 md:mb-5 border border-brand-orange/20">
-        Discover the City
+    <h1 class="font-heading text-4xl font-extrabold leading-tight text-brand-green md:text-5xl mb-3">
+      Find the best in <span class="relative inline-block isolate">
+        Kisumu
+        <span class="absolute bottom-1 left-0 -z-10 h-2 w-full bg-brand-orange md:bottom-2 md:h-3"></span>
       </span>
-      <h1 class="font-heading font-extrabold text-3xl md:text-5xl text-brand-dark mb-3 md:mb-5 leading-tight">
-        Find the best in <span class="relative inline-block text-brand-green">
-          Kisumu
-          <span class="absolute bottom-1 md:bottom-2 left-0 w-full h-2 md:h-3 bg-brand-orange/40 -z-10"></span>
-        </span>
-      </h1>
-      <p class="text-sm md:text-lg text-gray-600 font-body max-w-2xl mx-auto mb-6 md:mb-8 leading-relaxed">
-        The easiest way to discover local businesses, services, and experiences around Lake Victoria.
-      </p>
+    </h1>
+    
+    <p class="mx-auto max-w-2xl text-sm leading-relaxed text-gray-700 font-body md:text-lg mb-6 md:mb-8">
+      The easiest way to discover local businesses, services, and experiences around Lake Victoria.
+    </p>
 
-      <!-- Search Bar -->
-      <div class="max-w-xl mx-auto">
-        <div class="relative flex items-center group">
-          <svg class="absolute left-4 w-5 h-5 text-gray-400 group-focus-within:text-brand-orange transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-          </svg>
-          <input 
-            type="search" 
-            id="search-input"
-            placeholder="Search by business name or area..." 
-            class="w-full pl-11 pr-4 py-3 md:py-4 rounded-2xl border-2 border-gray-100 bg-gray-50 text-brand-dark focus:bg-white focus:outline-none focus:border-brand-green focus:ring-4 focus:ring-brand-green/10 shadow-sm text-sm md:text-base transition-all"
-          />
-        </div>
+    <!-- Full-Width Search Bar -->
+    <div class="max-w-2xl mx-auto">
+      <div class="relative flex items-center group">
+        <svg class="absolute left-4 w-5 h-5 text-gray-400 group-focus-within:text-brand-orange transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+        <input 
+          type="search" 
+          id="search-input"
+          placeholder="Search by business name or area..." 
+          class="w-full pl-11 pr-4 py-3.5 md:py-4 rounded-2xl border-2 border-gray-200 bg-white text-brand-dark font-body focus:outline-none focus:border-brand-green focus:ring-4 focus:ring-brand-green/10 shadow-sm text-sm md:text-base transition-all"
+        />
       </div>
     </div>
   </div>
-
-  <!-- Sticky Category Filter Bar -->
   <!-- Sticky Category Filter Bar -->
   <div class="sticky top-19 z-40 bg-brand-offwhite/95 backdrop-blur-md py-4 -mx-4 px-4 md:mx-0 md:px-0 mb-6 border-b border-gray-200/60 shadow-[0_10px_10px_-10px_rgba(0,0,0,0.05)]">
     <div class="flex items-center gap-3 overflow-x-auto pb-3 custom-scrollbar" id="category-filters">
