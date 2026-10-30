@@ -74,8 +74,9 @@ const categories = [
   </div>
 
   <!-- Sticky Category Filter Bar -->
+  <!-- Sticky Category Filter Bar -->
   <div class="sticky top-19 z-40 bg-brand-offwhite/95 backdrop-blur-md py-4 -mx-4 px-4 md:mx-0 md:px-0 mb-6 border-b border-gray-200/60 shadow-[0_10px_10px_-10px_rgba(0,0,0,0.05)]">
-    <div class="flex items-center gap-3 overflow-x-auto pb-2 no-scrollbar" id="category-filters">
+    <div class="flex items-center gap-3 overflow-x-auto pb-3 custom-scrollbar" id="category-filters">
       {categories.map((cat, index) => (
         <button
           type="button"
@@ -135,6 +136,11 @@ const categories = [
 </Layout>
 
 <style is:global>
+  /* Custom scrollbar for mobile filters */
+  .custom-scrollbar::-webkit-scrollbar { height: 4px; }
+  .custom-scrollbar::-webkit-scrollbar-track { background: #E8F0E5; border-radius: 4px; }
+  .custom-scrollbar::-webkit-scrollbar-thumb { background: #194C10; border-radius: 4px; }
+
   .animate-listing-enter {
     animation: fadeScale 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
   }
