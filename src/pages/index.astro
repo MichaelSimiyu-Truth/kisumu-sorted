@@ -27,87 +27,127 @@ const categories = [
 ---
 
 <Layout title="Home">
-  <!-- Hero Section -->
-  <div class="text-center py-8 md:py-14">
-    <h1 class="font-heading font-extrabold text-4xl md:text-5xl text-brand-green mb-4">
-      Find the best in <span class="relative inline-block">
-        Kisumu
-        <span class="absolute bottom-1 left-0 w-full h-2 bg-brand-orange -z-10"></span>
-      </span>
-    </h1>
-    <p class="text-lg text-gray-600 font-body max-w-2xl mx-auto mb-8">
-      The easiest way to discover local businesses, services, and experiences around Lake Victoria.
-    </p>
+  <!-- Premium Hero Section -->
+  <div class="relative bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 overflow-hidden px-6 py-12 md:py-16 text-center mb-10">
+    
+    <!-- Faint Background Watermarks -->
+    <div class="absolute -left-16 -top-16 opacity-[0.03] pointer-events-none">
+      <svg class="w-80 h-80 fill-brand-dark" viewBox="0 0 24 24">
+        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+      </svg>
+    </div>
+    <div class="absolute -right-16 -bottom-16 opacity-[0.03] pointer-events-none">
+      <svg class="w-80 h-80 fill-brand-dark" viewBox="0 0 24 24">
+        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+      </svg>
+    </div>
 
-    <!-- Search Bar -->
-    <div class="max-w-xl mx-auto">
-      <div class="relative flex items-center">
-        <input 
-          type="search" 
-          id="search-input"
-          placeholder="Search by business name, area (e.g. Milimani), or keyword..." 
-          class="w-full px-5 py-3.5 rounded-full border-2 border-gray-200 bg-white text-brand-dark focus:outline-none focus:border-brand-green shadow-sm text-sm md:text-base transition-colors"
-        />
+    <div class="relative z-10">
+      <span class="inline-block py-1.5 px-4 rounded-full bg-brand-orange/10 text-brand-orange text-xs font-bold tracking-wider uppercase mb-6 border border-brand-orange/20">
+        Discover the City
+      </span>
+      <h1 class="font-heading font-extrabold text-4xl md:text-5xl text-brand-dark mb-6 leading-tight">
+        Find the best in <span class="relative inline-block text-brand-green">
+          Kisumu
+          <span class="absolute bottom-2 left-0 w-full h-3 bg-brand-orange/40 -z-10"></span>
+        </span>
+      </h1>
+      <p class="text-lg text-gray-600 font-body max-w-2xl mx-auto mb-10 leading-relaxed">
+        The easiest way to discover local businesses, services, and experiences around Lake Victoria.
+      </p>
+
+      <!-- Search Bar -->
+      <div class="max-w-xl mx-auto">
+        <div class="relative flex items-center group">
+          <svg class="absolute left-4 w-5 h-5 text-gray-400 group-focus-within:text-brand-orange transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+          <input 
+            type="search" 
+            id="search-input"
+            placeholder="Search by business name, area (e.g. Milimani)..." 
+            class="w-full pl-12 pr-5 py-4 rounded-2xl border-2 border-gray-100 bg-gray-50 text-brand-dark focus:bg-white focus:outline-none focus:border-brand-green focus:ring-4 focus:ring-brand-green/10 shadow-sm text-base transition-all"
+          />
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- Category Filter Chips -->
-  <div class="flex items-center gap-2 overflow-x-auto pb-4 mb-6 no-scrollbar" id="category-filters">
-    {categories.map((cat, index) => (
-      <button
-        type="button"
-        data-filter={cat}
-        class={`filter-btn shrink-0 inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold transition-all cursor-pointer ${
-          index === 0 
-            ? 'bg-brand-green text-white shadow-sm' 
-            : 'bg-brand-lightgreen text-brand-dark hover:bg-green-200'
-        }`}
-      >
-        <!-- Orange dot motif from the logo (visible on active chip) -->
-        <span class={`dot w-2 h-2 rounded-full bg-brand-orange ${index === 0 ? 'inline-block' : 'hidden'}`}></span>
-        {cat}
-      </button>
-    ))}
+  <!-- Sticky Category Filter Bar -->
+  <div class="sticky top-19 z-40 bg-brand-offwhite/95 backdrop-blur-md py-4 -mx-4 px-4 md:mx-0 md:px-0 mb-6 border-b border-gray-200/60 shadow-[0_10px_10px_-10px_rgba(0,0,0,0.05)]">
+    <div class="flex items-center gap-3 overflow-x-auto pb-2 no-scrollbar" id="category-filters">
+      {categories.map((cat, index) => (
+        <button
+          type="button"
+          data-filter={cat}
+          class={`filter-btn shrink-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-bold transition-all cursor-pointer border ${
+            index === 0 
+              ? 'bg-brand-green text-white border-brand-green shadow-md shadow-brand-green/20' 
+              : 'bg-white text-gray-600 border-gray-200 hover:border-brand-green hover:text-brand-green shadow-sm'
+          }`}
+        >
+          <!-- Orange dot motif from the logo (visible on active chip) -->
+          <span class={`dot w-2 h-2 rounded-full bg-brand-orange transition-transform duration-300 ${index === 0 ? 'scale-100' : 'scale-0 hidden'}`}></span>
+          {cat}
+        </button>
+      ))}
+    </div>
   </div>
 
   <!-- Directory Section -->
-  <section class="mt-2">
-    <div class="flex justify-between items-end mb-6">
-      <h2 class="font-heading font-bold text-2xl text-brand-dark">
+  <section class="mt-2 min-h-[50vh]">
+    <div class="flex justify-between items-end mb-8">
+      <h2 class="font-heading font-bold text-2xl md:text-3xl text-brand-dark">
         Explore Businesses
-        <span class="block w-12 h-1 bg-brand-orange mt-1 rounded"></span>
+        <span class="block w-12 h-1 bg-brand-orange mt-2 rounded"></span>
       </h2>
-      <span id="results-count" class="text-sm text-gray-500 font-medium">
+      <span id="results-count" class="text-sm md:text-base text-gray-500 font-medium bg-gray-100 px-3 py-1 rounded-lg">
         {sortedListings.length} {sortedListings.length === 1 ? 'listing' : 'listings'}
       </span>
     </div>
 
     <!-- 3-Column Responsive Grid -->
-    <div id="listings-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div id="listings-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
       {sortedListings.map((listing) => (
-        <ListingCard listing={listing} />
+        <div class="listing-wrapper" data-category={listing.data.category} data-search={`${listing.data.name} ${listing.data.area} ${listing.data.description}`.toLowerCase()}>
+          <ListingCard listing={listing} />
+        </div>
       ))}
     </div>
 
     <!-- Empty State (Hidden by default) -->
-    <div id="empty-state" class="hidden text-center py-12 bg-white rounded-xl border border-gray-200">
-      <p class="font-heading font-bold text-xl text-brand-dark mb-2">No businesses found</p>
-      <p class="text-gray-600 text-sm mb-4">Try adjusting your search or selecting a different category.</p>
+    <div id="empty-state" class="hidden text-center py-16 bg-white rounded-3xl border border-gray-100 shadow-sm mt-8">
+      <div class="w-16 h-16 bg-brand-orange/10 rounded-full flex items-center justify-center mx-auto mb-4">
+        <svg class="w-8 h-8 text-brand-orange" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      </div>
+      <p class="font-heading font-bold text-2xl text-brand-dark mb-2">No businesses found</p>
+      <p class="text-gray-500 mb-6">Try adjusting your search or selecting a different category.</p>
       <button 
         id="reset-filters" 
-        class="bg-brand-lightgreen text-brand-dark font-bold text-sm px-4 py-2 rounded-lg hover:bg-green-200 transition-colors cursor-pointer"
+        class="bg-brand-green text-white font-bold text-sm px-6 py-3 rounded-xl hover:bg-green-800 transition-colors cursor-pointer shadow-md"
       >
-        Reset filters
+        Clear all filters
       </button>
     </div>
   </section>
 </Layout>
 
+<style is:global>
+  .animate-listing-enter {
+    animation: fadeScale 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+  @keyframes fadeScale {
+    0% { opacity: 0; transform: scale(0.95) translateY(10px); }
+    100% { opacity: 1; transform: scale(1) translateY(0); }
+  }
+</style>
+
 <script>
   const searchInput = document.getElementById('search-input') as HTMLInputElement;
   const filterBtns = document.querySelectorAll('.filter-btn');
-  const cards = document.querySelectorAll('.listing-card');
+  const wrappers = document.querySelectorAll('.listing-wrapper');
   const resultsCount = document.getElementById('results-count');
   const emptyState = document.getElementById('empty-state');
   const resetBtn = document.getElementById('reset-filters');
@@ -118,19 +158,25 @@ const categories = [
   function filterListings() {
     let visibleCount = 0;
 
-    cards.forEach((card) => {
-      const cardElement = card as HTMLElement;
-      const category = cardElement.getAttribute('data-category') || '';
-      const searchContent = cardElement.getAttribute('data-search') || '';
+    wrappers.forEach((wrapper) => {
+      const el = wrapper as HTMLElement;
+      const category = el.getAttribute('data-category') || '';
+      const searchContent = el.getAttribute('data-search') || '';
 
       const matchesCategory = activeCategory === 'All' || category === activeCategory;
       const matchesSearch = searchContent.includes(searchQuery);
 
       if (matchesCategory && matchesSearch) {
-        cardElement.style.display = 'flex';
+        if (el.style.display === 'none' || el.style.display === '') {
+          el.style.display = 'block';
+          // Force reflow to restart animation
+          void el.offsetWidth;
+          el.classList.add('animate-listing-enter');
+        }
         visibleCount++;
       } else {
-        cardElement.style.display = 'none';
+        el.style.display = 'none';
+        el.classList.remove('animate-listing-enter');
       }
     });
 
@@ -145,6 +191,9 @@ const categories = [
     }
   }
 
+  // Initial animation run
+  filterListings();
+
   // Handle Category Chip Clicks
   filterBtns.forEach((btn) => {
     btn.addEventListener('click', () => {
@@ -155,14 +204,19 @@ const categories = [
         const isSelected = b === btn;
         b.classList.toggle('bg-brand-green', isSelected);
         b.classList.toggle('text-white', isSelected);
-        b.classList.toggle('shadow-sm', isSelected);
-        b.classList.toggle('bg-brand-lightgreen', !isSelected);
-        b.classList.toggle('text-brand-dark', !isSelected);
+        b.classList.toggle('border-brand-green', isSelected);
+        b.classList.toggle('shadow-md', isSelected);
+        b.classList.toggle('shadow-brand-green/20', isSelected);
+        
+        b.classList.toggle('bg-white', !isSelected);
+        b.classList.toggle('text-gray-600', !isSelected);
+        b.classList.toggle('border-gray-200', !isSelected);
 
         const dot = b.querySelector('.dot');
         if (dot) {
-          dot.classList.toggle('inline-block', isSelected);
+          dot.classList.toggle('scale-100', isSelected);
           dot.classList.toggle('hidden', !isSelected);
+          dot.classList.toggle('scale-0', !isSelected);
         }
       });
 
