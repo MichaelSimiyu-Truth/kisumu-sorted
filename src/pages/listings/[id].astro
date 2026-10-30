@@ -43,37 +43,49 @@ const ogImage = photos && photos.length > 0 ? photos[0].src : undefined;
   </div>
 
   <!-- Airbnb-Style Photo Mosaic Hero -->
-  <div class="relative rounded-3xl overflow-hidden mb-10 bg-brand-lightgreen h-64 md:h-112.5 shadow-sm">
+  <!-- Responsive Photo Gallery Hero -->
+  <div class="relative rounded-3xl overflow-hidden mb-10 bg-brand-lightgreen h-72 md:h-112.5 shadow-sm group">
     {featured && (
-      <span class="absolute top-4 left-4 bg-brand-orange text-brand-dark text-xs font-heading font-extrabold px-4 py-2 rounded-full shadow-md z-20">
+      <span class="absolute top-4 left-4 bg-brand-orange text-brand-dark text-xs font-heading font-extrabold px-4 py-2 rounded-full shadow-md z-20 pointer-events-none">
         ★ Featured Business
       </span>
     )}
 
     {photos && photos.length >= 3 ? (
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-2 h-full">
-        <!-- Main Large Photo -->
-        <button type="button" data-img-src={photos[0].src} class="gallery-thumb md:col-span-3 h-full w-full relative group cursor-pointer border-0 p-0 overflow-hidden focus:outline-none focus:ring-4 focus:ring-brand-orange focus:ring-inset">
-          <Image src={photos[0]} alt={name} class="w-full h-full object-cover group-hover:scale-105 group-hover:brightness-95 transition-all duration-500" />
+      <div class="flex md:grid md:grid-cols-4 gap-2 h-full w-full overflow-x-auto md:overflow-hidden snap-x snap-mandatory no-scrollbar">
+        
+        {/* Main Photo (Left on Desktop, 1st on Mobile) */}
+        <button type="button" data-img-src={photos[0].src} class="gallery-thumb shrink-0 w-full md:w-auto h-full snap-center md:col-span-3 relative cursor-pointer border-0 p-0 focus:outline-none bg-brand-dark/5">
+          <Image src={photos[0]} alt={name} class="absolute inset-0 w-full h-full object-cover object-center group-hover:brightness-95 hover:brightness-100! transition-all duration-300" />
+          <div class="absolute bottom-4 right-4 bg-black/70 text-white text-xs font-bold px-3 py-1 rounded-full md:hidden z-10">1 / {photos.length}</div>
         </button>
-        <!-- Stacked Right Photos -->
-        <div class="hidden md:flex flex-col gap-2 h-full">
-          <button type="button" data-img-src={photos[1].src} class="gallery-thumb h-1/2 w-full relative group cursor-pointer border-0 p-0 overflow-hidden focus:outline-none focus:ring-4 focus:ring-brand-orange focus:ring-inset">
-            <Image src={photos[1]} alt={name} class="w-full h-full object-cover group-hover:scale-105 group-hover:brightness-95 transition-all duration-500" />
+        
+        {/* Desktop Stack (Hidden on Mobile) */}
+        <div class="hidden md:grid grid-rows-2 gap-2 h-full w-full">
+          <button type="button" data-img-src={photos[1].src} class="gallery-thumb relative cursor-pointer border-0 p-0 focus:outline-none bg-brand-dark/5">
+            <Image src={photos[1]} alt={name} class="absolute inset-0 w-full h-full object-cover object-center group-hover:brightness-95 hover:brightness-100! transition-all duration-300" />
           </button>
-          <button type="button" data-img-src={photos[2].src} class="gallery-thumb h-1/2 w-full relative group cursor-pointer border-0 p-0 overflow-hidden focus:outline-none focus:ring-4 focus:ring-brand-orange focus:ring-inset">
-            <Image src={photos[2]} alt={name} class="w-full h-full object-cover group-hover:scale-105 group-hover:brightness-95 transition-all duration-500" />
+          <button type="button" data-img-src={photos[2].src} class="gallery-thumb relative cursor-pointer border-0 p-0 focus:outline-none bg-brand-dark/5">
+            <Image src={photos[2]} alt={name} class="absolute inset-0 w-full h-full object-cover object-center group-hover:brightness-95 hover:brightness-100! transition-all duration-300" />
             {photos.length > 3 && (
-              <div class="absolute inset-0 bg-brand-dark/50 flex items-center justify-center text-white font-heading font-bold text-xl group-hover:bg-brand-dark/40 transition-colors">
+              <div class="absolute inset-0 bg-brand-dark/50 flex items-center justify-center text-white font-heading font-bold text-xl hover:bg-brand-dark/40 transition-colors z-10">
                 +{photos.length - 3} more
               </div>
             )}
           </button>
         </div>
+
+        {/* Mobile Extra Photos (Visible only on mobile swipe) */}
+        {photos.slice(1).map((photo, index) => (
+           <button type="button" data-img-src={photo.src} class="md:hidden gallery-thumb shrink-0 w-full h-full snap-center relative cursor-pointer border-0 p-0 bg-brand-dark/5 focus:outline-none">
+              <Image src={photo} alt={`${name} photo ${index + 2}`} class="absolute inset-0 w-full h-full object-cover object-center" />
+              <div class="absolute bottom-4 right-4 bg-black/70 text-white text-xs font-bold px-3 py-1 rounded-full z-10">{index + 2} / {photos.length}</div>
+           </button>
+        ))}
       </div>
     ) : photos && photos.length > 0 ? (
-      <button type="button" data-img-src={photos[0].src} class="gallery-thumb h-full w-full relative group cursor-pointer border-0 p-0 overflow-hidden focus:outline-none">
-        <Image src={photos[0]} alt={name} class="w-full h-full object-cover group-hover:scale-105 transition-all duration-500" />
+      <button type="button" data-img-src={photos[0].src} class="gallery-thumb h-full w-full relative cursor-pointer border-0 p-0 focus:outline-none bg-brand-dark/5">
+        <Image src={photos[0]} alt={name} class="absolute inset-0 w-full h-full object-cover object-center hover:scale-105 transition-all duration-500" />
       </button>
     ) : (
       <div class="flex items-center justify-center h-full">
